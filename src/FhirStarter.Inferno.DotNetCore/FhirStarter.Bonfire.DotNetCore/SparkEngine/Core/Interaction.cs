@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using FhirStarter.Bonfire.DotNetCore.SparkEngine.Extensions;
 using Hl7.Fhir.Model;
 
 namespace FhirStarter.Bonfire.DotNetCore.SparkEngine.Core

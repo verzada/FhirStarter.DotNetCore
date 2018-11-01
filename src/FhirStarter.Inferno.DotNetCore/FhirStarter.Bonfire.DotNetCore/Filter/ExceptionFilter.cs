@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web.Http;
 using System.Xml.Linq;
+using Hl7.Fhir.Model;
+using Microsoft.AspNetCore.Http;
 
 namespace FhirStarter.Bonfire.DotNetCore.Filter
 {

@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using FhirStarter.Bonfire.DotNetCore.SparkEngine.Core;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 

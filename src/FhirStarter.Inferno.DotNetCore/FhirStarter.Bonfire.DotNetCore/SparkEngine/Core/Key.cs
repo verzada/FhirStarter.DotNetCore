@@ -1,4 +1,6 @@
-﻿namespace FhirStarter.Bonfire.DotNetCore.SparkEngine.Core
+﻿using FhirStarter.Bonfire.DotNetCore.SparkEngine.Extensions;
+
+namespace FhirStarter.Bonfire.DotNetCore.SparkEngine.Core
 {
     public interface IKey
     {

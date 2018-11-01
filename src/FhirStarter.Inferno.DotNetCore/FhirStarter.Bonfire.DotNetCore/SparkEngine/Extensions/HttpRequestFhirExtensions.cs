@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using FhirStarter.Bonfire.DotNetCore.SparkEngine.Core;
+using FhirStarter.Bonfire.DotNetCore.SparkEngine.Service;
 using Hl7.Fhir.Rest;
 
 namespace FhirStarter.Bonfire.DotNetCore.SparkEngine.Extensions
