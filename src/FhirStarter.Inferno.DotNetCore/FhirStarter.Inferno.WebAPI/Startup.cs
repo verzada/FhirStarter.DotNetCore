@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Serialization;
 
 namespace FhirStarter.Inferno.WebAPI
 {
@@ -37,5 +39,14 @@ namespace FhirStarter.Inferno.WebAPI
 
             app.UseMvc();
         }
+
+            private void Configure(IConfiguration config)
+            {
+                //config.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
+                //config.Formatters.JsonFormatter.SupportedMediaTypes.Clear();
+                //config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/xacml+json"));
+                //config.Formatters.JsonFormatter.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                //config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            }
     }
 }
