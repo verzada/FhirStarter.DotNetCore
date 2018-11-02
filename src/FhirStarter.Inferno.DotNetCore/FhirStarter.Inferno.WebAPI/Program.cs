@@ -1,24 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using System.IO;
+using System.Net;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace FhirStarter.Inferno.WebAPI
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
-            CreateWebHostBuilder(args).Build().Run();
+            var hostname = Dns.GetHostName();
+            var webHost = new WebHostBuilder()
+                .UseKestrel()
+                .UseContentRoot(Directory.GetCurrentDirectory())               
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    logging.AddLog4Net("log4net.config");
+                })
+                // the .useUrls only applies when using dotnet run
+                .UseUrls($"http://{hostname}:5052")
+                .UseStartup<Startup>()
+                .Build();
+            webHost.Run();
         }
-
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
     }
 }

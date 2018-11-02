@@ -7,18 +7,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Hl7.Fhir.Rest;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 
 namespace FhirStarter.Inferno.WebAPI.Extensions
 {
     public static class HttpRequestExtension
     {
-        //public static void Replace(this HttpHeaders headers, string header, string value)
-        //{
-        //headers.Remove(header, value)
-        //    headers.TryAdd(header, value);
-        //}
+        public static void Replace(this HttpHeaders headers, string header, string value)
+        {
+            throw new NotImplementedException();
+        }
 
-        private static List<Tuple<string, string>> TupledPArameters(this HttpRequest request)
+        private static List<Tuple<string, string>> TupledParameters(this HttpRequest request)
         {
             var list = new List<Tuple<string, string>>();
             //var query = request.get
@@ -33,7 +33,7 @@ namespace FhirStarter.Inferno.WebAPI.Extensions
 
         public static SearchParams GetSearchParams(this HttpRequest request)
         {
-            var parameters = request.TupledPArameters().Where(tp => tp.Item1 != "_format");
+            var parameters = request.TupledParameters().Where(tp => tp.Item1 != "_format");
             var searchCommand = SearchParams.FromUriParamList(parameters);
             return searchCommand;
         }

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using FhirStarter.Inferno.WebAPI.Config;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,13 +43,22 @@ namespace FhirStarter.Inferno.WebAPI
             app.UseMvc();
         }
 
-            private void Configure(IConfiguration config)
+            private void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
+                IHttpContextAccessor contextAccessor)
             {
+                var appSettings =
+                    StartupConfigHelper.BuildConfiguration(Directory.GetCurrentDirectory(), "appSettings.json");
+                var fhirStarterSettings =
+                    StartupConfigHelper.BuildConfiguration(Directory.GetCurrentDirectory(), "FhirStarterSettings.json");
+
                 //config.Formatters.XmlFormatter.SupportedMediaTypes.Clear();
                 //config.Formatters.JsonFormatter.SupportedMediaTypes.Clear();
                 //config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/xacml+json"));
                 //config.Formatters.JsonFormatter.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
                 //config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+                FhirStarterConfig.SetupFhir(app, env,loggerFactory, contextAccessor, appSettings, fhirStarterSettings);
+                
             }
     }
 }

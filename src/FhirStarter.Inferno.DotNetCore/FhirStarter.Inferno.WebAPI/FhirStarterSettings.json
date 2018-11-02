@@ -1,0 +1,10 @@
+{
+  "FhirStarterSettings":
+  {
+    "FhirServiceAssemblies": ["FhirStarter.Inferno.WebAPI"],
+    "MockupEnabled":  "false",
+    "EnableValidation":  "false",
+    "LogRequestWhenError":  "false",
+    "FhirPublisher":  "ACME"
+  }
+}

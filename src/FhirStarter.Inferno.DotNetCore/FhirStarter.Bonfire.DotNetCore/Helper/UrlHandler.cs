@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Hl7.Fhir.Model;
 using Microsoft.AspNetCore.Http;
 
@@ -11,6 +9,11 @@ namespace FhirStarter.Bonfire.DotNetCore.Helper
         public static string GetUrlForOperationDefinition(HttpContext context, string fhirUrlParameter, string alias)
         {
             return GetParentUrl(context, fhirUrlParameter) + fhirUrlParameter + nameof(OperationDefinition) + "/" + alias;
+        }
+
+        public static string GetUrlForOperationDefinition(string urlPath, string fhirUrlParameter, string alias)
+        {
+            return urlPath + fhirUrlParameter + nameof(OperationDefinition) + "/" + alias;
         }
 
         private static string GetParentUrl(HttpContext context, string fhirUrlParameter)
