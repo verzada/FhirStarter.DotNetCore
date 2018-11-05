@@ -1,14 +1,17 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using FhirStarter.Bonfire.DotNetCore.Interface;
+using FhirStarter.Inferno.WebAPI.Config;
 using FhirStarter.Inferno.WebAPI.Extensions;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Hl7.Fhir.Serialization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -19,12 +22,20 @@ namespace FhirStarter.Inferno.WebAPI.Controllers
     public class FhirController : Controller
     {
         private readonly AbstractStructureDefinitionService _abstractStructureDefinitionService;
+        private ILogger<IFhirService> _log;
 
         //public FhirController(AbstractStructureDefinitionService abstractStructureDefinitionService)
         //{
         //    _abstractStructureDefinitionService = abstractStructureDefinitionService;
         //}
-        public FhirController(){}
+        public FhirController(ILogger<IFhirService> loggerFactory)
+        {
+            _log = loggerFactory;
+          //  var services = this.HttpContext;
+   //         var fhirServices = (IFhirService[]) services.GetService(typeof(IFhirService));
+         //   var yolo = fhirServices[0];
+            int i = 0;
+        }
 
         #region structure definitions
 
@@ -69,10 +80,19 @@ namespace FhirStarter.Inferno.WebAPI.Controllers
 
         #endregion structure definitions
 
-        [HttpGet, Route("{type}")]
-        public void Read(string type)
+        [HttpGet, Route("{type}"),FormatFilter]
+        public IActionResult Read(string type)
         {
             var searchParams = Request.GetSearchParams();
+            var service = ControllerHelper.GetFhirService(type, HttpContext.RequestServices);
+
+            var result = service.Read(searchParams);
+            //var services = HttpContext;
+            //if (services != null)
+            //{
+            //    var lala = GetFhirService(type, services.RequestServices);
+            //    var request = services.RequestServices.GetService<IEnumerable<IFhirService>>().FirstOrDefault(p => p.GetServiceResourceReference().Equals(type));
+            //}
 
             //var test = searchParams;
 
@@ -80,75 +100,51 @@ namespace FhirStarter.Inferno.WebAPI.Controllers
             //var parameters = Request.GetSearchParams();
             //if (!(parameters.Parameters.Count > 0)) return new HttpResponseMessage(HttpStatusCode.ExpectationFailed);
             //var results = service.Read(parameters);
-            //return SendResponse(results);
-
+           // return SendResponse(result);
+            //return result;
+            //var returnObject = (object) result;
+            return Ok(result);
         }
 
           [HttpGet, Route("{type}/{id}"), Route("{type}/identifier/{id}")]
-        public HttpResponseMessage Read(string type, string id)
+        public IActionResult Read(string type, string id)
         {
-            //if (type.Equals(nameof(OperationDefinition)))
-            //{
-            //    var operationDefinitions = _handler.GetOperationDefinitions(id, _fhirServices);
-            //    return SendResponse(operationDefinitions);
-            //}
-
-            //var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
-            //var result = service.Read(id);
-
-            //return SendResponse(result);
-            return SendResponse(new AllergyIntolerance());
+            var service = ControllerHelper.GetFhirService(type, HttpContext.RequestServices);
+            var result = service.Read(id);
+            return Ok(result);
         }
        
      [HttpGet, Route("")]
         // ReSharper disable once InconsistentNaming
         public HttpResponseMessage Query(string _query)
-        {
-            //var searchParams = Request.GetSearchParams();
-            //var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, searchParams.Query);
-            //var result = service.Read(searchParams);
-
-            //return SendResponse(result);
-
-            return SendResponse(new AllergyIntolerance());
-        }
+     {
+         throw new NotImplementedException();
+     }
 
         [HttpPost, Route("{type}")]
         public HttpResponseMessage Create(string type, Resource resource)
         {
-            var xmlSerializer = new FhirXmlSerializer();            
-            //var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);            
-            //resource = (Resource) ValidateResource(resource, true);
-            //return resource is OperationOutcome ? SendResponse(resource) : _handler.ResourceCreate(type, resource, service);
-
-            return SendResponse(new AllergyIntolerance());
+           throw new NotImplementedException();
         }
 
         [HttpPut, Route("{type}/{id}")]
         public HttpResponseMessage Update(string type, string id, Resource resource)
         {
-            //var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
-            //return _handler.ResourceUpdate(type, id, resource, service);
-
-            return SendResponse(new AllergyIntolerance());
+           throw new NotImplementedException();
         }
 
         [HttpDelete, Route("{type}/{id}")]
         public HttpResponseMessage Delete(string type, string id)
         {
-            //var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
-            //return _handler.ResourceDelete(type, Key.Create(type, id), service);
-
-            return SendResponse(new AllergyIntolerance());
+           
+            throw new NotImplementedException();
         }
 
         [HttpPatch, Route("{type}/{id}")]
         public HttpResponseMessage Patch(string type, string id, Resource resource)
         {
-            //var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
-            //return _handler.ResourcePatch(type, Key.Create(type, id), resource, service);
            
-            return SendResponse(new AllergyIntolerance());
+            throw new NotImplementedException();
            }
 
 
@@ -187,10 +183,14 @@ namespace FhirStarter.Inferno.WebAPI.Controllers
 
 
         #region private methods
+
         private HttpResponseMessage SendResponse(Base resource)
         {
-            //var headers = Request.Headers;
-            //var accept = headers.Accept;
+            var searchParams = Request.GetSearchParams();
+            var format = searchParams.Parameters.FirstOrDefault(p => p.Item1.Contains("_format"));
+
+            var headers = Request.Headers;
+            //var accept = headers.;
 
             //var returnJson = ReturnJson(accept);
             //if (!(resource is OperationOutcome))

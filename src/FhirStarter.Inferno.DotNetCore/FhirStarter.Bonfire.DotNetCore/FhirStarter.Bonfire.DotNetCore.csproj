@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <Folder Include="Filter\" />
+    <Folder Include="Validation\" />
   </ItemGroup>
 
 </Project>

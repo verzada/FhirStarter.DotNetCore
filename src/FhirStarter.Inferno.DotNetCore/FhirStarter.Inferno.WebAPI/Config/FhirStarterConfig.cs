@@ -1,29 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using FhirStarter.Bonfire.DotNetCore.Interface;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace FhirStarter.Inferno.WebAPI.Config
 {
     public static class FhirStarterConfig
     {
-        public static void SetupFhir(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
+        private static int _amountOfInitializedIFhirServices;
+        private static int _amountOfIFhirStructureDefinitionsInitialized;
+        private static int _amountOfInitializedIFhirMockupServices;
+
+        public static void SetupFhir(IServiceCollection service, ILoggerFactory loggerFactory,
             IHttpContextAccessor contextAccessor, IConfigurationRoot appSettings, IConfigurationRoot fhirStarterSettings)
         {
             
            SetupLogging(loggerFactory);
-            RegisterServices(app, fhirStarterSettings);
+            RegisterServices(service, fhirStarterSettings);
+        }
+
+        public static void SetupFhirServices(IServiceCollection service,IConfigurationRoot appSettings, IConfigurationRoot fhirStarterSettings)
+        {
+            RegisterServices(service, fhirStarterSettings);
         }
 
         #region Assembly
 
         
 
-        private static void RegisterServices(IApplicationBuilder app, IConfigurationRoot fhirStarterSettings)
+        private static void RegisterServices(IServiceCollection service, IConfigurationRoot fhirStarterSettings)
         {
             var fhirService = typeof(IFhirService);
             var fhirStructureDefinition = typeof(AbstractStructureDefinitionService);
@@ -39,14 +47,14 @@ namespace FhirStarter.Inferno.WebAPI.Config
             foreach (var asm in fhirServiceAssemblies)
             {
                 var types = asm.GetTypes();
-                foreach (var classType in asm.GetTypes())
+                foreach (var classType in types)
                 {
-                    BindIFhirServices(app, serviceTypes, classType);
+                    BindIFhirServices(service, serviceTypes, classType);
                 }
             }
         }
 
-        private static void BindIFhirServices(IApplicationBuilder app, List<TypeInitializer> serviceTypes, Type classType)
+        private static void BindIFhirServices(IServiceCollection service, List<TypeInitializer> serviceTypes, Type classType)
         {
             var serviceType = FindType(serviceTypes, classType);
             if (serviceType != null)
@@ -54,19 +62,21 @@ namespace FhirStarter.Inferno.WebAPI.Config
                 if (serviceType.Name.Equals(nameof(IFhirService)))
                 {
                     var instance = (IFhirService)Activator.CreateInstance(classType);
+                   service.Add(new ServiceDescriptor(typeof(IFhirService), instance));
                     //app.Bind<IFhirService>().ToConstant(instance);
-                    //_amountOfInitializedIFhirServices++;
+                    _amountOfInitializedIFhirServices++;
                 }
-                //else if (serviceType.Name.Equals(nameof(IFhirMockupService)))
-                //{
-                //    var instance = (IFhirMockupService)Activator.CreateInstance(classType);
-                //    kernel.Bind<IFhirMockupService>().ToConstant(instance);
-                //    _amountOfInitializedIFhirMockupServices++;
-                //}
+                else if (serviceType.Name.Equals(nameof(IFhirMockupService)))
+                {
+                    var instance = (IFhirMockupService)Activator.CreateInstance(classType);
+                    service.Add(new ServiceDescriptor(typeof(IFhirMockupService), instance));
+                    //kernel.Bind<IFhirMockupService>().ToConstant(instance);
+                    _amountOfInitializedIFhirMockupServices++;
+                }
                 //else if (serviceType.Name.Equals(nameof(AbstractStructureDefinitionService)))
                 //{
                 //    var structureDefinitionService = (AbstractStructureDefinitionService)Activator.CreateInstance(classType);
-                //    kernel.Bind<AbstractStructureDefinitionService>().ToConstant(structureDefinitionService);
+                //  //  kernel.Bind<AbstractStructureDefinitionService>().ToConstant(structureDefinitionService);
                 //    var validator = structureDefinitionService.GetValidator();
                 //    if (validator != null)
                 //    {

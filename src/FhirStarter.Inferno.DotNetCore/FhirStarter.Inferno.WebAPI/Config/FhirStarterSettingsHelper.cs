@@ -22,12 +22,32 @@ namespace FhirStarter.Inferno.WebAPI.Config
 
         private static ICollection<string> GetArrayFromSettings(IConfigurationRoot fhirStarterSettings)
         {
-            var assemblyNames = fhirStarterSettings.GetValue<string[]>(FhirStarterSettingsFhirServiceAssemblies);
+            var settings = GetFhirStarterSettings(fhirStarterSettings);
+            
+            var assemblyNames = settings.FhirServiceAssemblies;
             if (assemblyNames != null && assemblyNames.Any())
             {
                 return assemblyNames;
             }
             return new List<string>();
         }
+
+        private static FhirStarterSettings GetFhirStarterSettings(IConfigurationRoot fhirStarterSettings)
+        {
+            var sectionData = fhirStarterSettings.GetSection(nameof(FhirStarterSettings));
+            var section = new FhirStarterSettings();
+            sectionData.Bind(section);
+            return section;
+        }
+
+        //private static string GetArrayFromSettings(IConfigurationRoot fhirStarterSettings)
+        //{
+        //    var assemblyNames = fhirStarterSettings.GetValue<string>(FhirStarterSettingsFhirServiceAssemblies);
+        //    if (assemblyNames != null && assemblyNames.Any())
+        //    {
+        //        return assemblyNames;
+        //    }
+        //    return string.Empty;
+        //}
     }
 }

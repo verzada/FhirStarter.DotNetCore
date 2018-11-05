@@ -12,6 +12,7 @@ using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Hl7.Fhir.Serialization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace FhirStarter.Inferno.WebAPI.Services
 {
@@ -45,7 +46,7 @@ namespace FhirStarter.Inferno.WebAPI.Services
                     throw new ArgumentException("Using " + nameof(SearchParams) +
                                                 " in Read(SearchParams searchParams) should throw an exception which is put into an OperationOutcomes issues");
                 }
-                if (parameter.Item1.Contains("log") && parameter.Item2.Contains("operationoutcome"))
+                if (parameter.Item1.Contains("log") && parameter.Item2.Contains(nameof(OperationOutcome).ToLower()))
                 {
                     var operationOutcome = new OperationOutcome{Issue = new List<OperationOutcome.IssueComponent>()};
                     var issue = new OperationOutcome.IssueComponent
