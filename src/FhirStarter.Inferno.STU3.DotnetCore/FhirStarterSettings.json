@@ -1,0 +1,10 @@
+{
+  "FhirStarterSettings":
+  {
+    "FhirServiceAssemblies": ["FhirStarter.Inferno.STU3.DotnetCore"],
+    "MockupEnabled":  "false",
+    "EnableValidation":  "false",
+    "LogRequestWhenError":  "false",
+    "FhirPublisher":  "ACME"
+  }
+}
