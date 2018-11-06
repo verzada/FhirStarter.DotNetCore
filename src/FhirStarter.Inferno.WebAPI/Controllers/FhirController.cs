@@ -113,6 +113,7 @@ namespace FhirStarter.Inferno.WebAPI.Controllers
             _log.LogInformation("Request with string id: " + id);
             var service = ControllerHelper.GetFhirService(type, HttpContext.RequestServices);
             var result = service.Read(id);
+            _log.LogInformation("Result returned");
             return Ok(result);
         }
        

@@ -14,7 +14,6 @@ namespace FhirStarter.Inferno.WebAPI.LoggerSettings
         {
             if (loggingEvent == null)
                 throw new ArgumentNullException(nameof(loggingEvent));
-           
             return _filters.Any(filter => !filter.Decide(loggingEvent).Equals(FilterDecision.Accept)) ? FilterDecision.Deny : FilterDecision.Accept;
         }
 
