@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FhirStarter.STU3.Instigator
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FhirStarter.STU3.Detonator.DotNetCore", "FhirStarter.STU3.Detonator.DotNetCore\FhirStarter.STU3.Detonator.DotNetCore.csproj", "{B9FB7742-1E10-496D-80CF-74929C7A4C66}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Old Library", "Old Library", "{1D1012B8-674D-44D9-8F6F-FBCF24C4C380}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FhirStarter.STU3.Twisted.DotNetCore", "FhirStarter.STU3.Twisted.DotNetCore\FhirStarter.STU3.Twisted.DotNetCore.csproj", "{B431E2AD-DFC1-4C3A-8C0B-2A37ED42C474}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,11 +39,17 @@ Global
 		{B9FB7742-1E10-496D-80CF-74929C7A4C66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9FB7742-1E10-496D-80CF-74929C7A4C66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9FB7742-1E10-496D-80CF-74929C7A4C66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B431E2AD-DFC1-4C3A-8C0B-2A37ED42C474}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B431E2AD-DFC1-4C3A-8C0B-2A37ED42C474}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B431E2AD-DFC1-4C3A-8C0B-2A37ED42C474}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B431E2AD-DFC1-4C3A-8C0B-2A37ED42C474}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{658D8C5F-45F9-4A8F-B87E-031A5C15DC91} = {1D1012B8-674D-44D9-8F6F-FBCF24C4C380}
+		{9D6E4AE6-E6D2-47C8-B26A-D143A3CAB0B9} = {1D1012B8-674D-44D9-8F6F-FBCF24C4C380}
 		{477877E1-C8B8-4530-8CEE-FBF4168D0C43} = {27895BAA-E4E0-46D9-962E-20F1D61045A3}
 		{B9FB7742-1E10-496D-80CF-74929C7A4C66} = {27895BAA-E4E0-46D9-962E-20F1D61045A3}
 	EndGlobalSection

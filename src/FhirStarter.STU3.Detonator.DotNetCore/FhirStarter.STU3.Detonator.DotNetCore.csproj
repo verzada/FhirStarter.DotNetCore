@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Description><div>Icons made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div></Description>
+    <Authors>verzada, snoopie72</Authors>
+    <Company>Helse Nord IKT</Company>
+    <Product>FhirStarter</Product>
+    <Copyright>Copyright @ 2018</Copyright>
+    <PackageProjectUrl>https://github.com/verzada/FhirStarter.DotNetCore</PackageProjectUrl>
+    <PackageIconUrl>https://github.com/verzada/FhirStarter.DotNetCore/blob/master/resource/detonatorBomb.png?raw=true</PackageIconUrl>
+    <PackageTags>fhir dotnetcore stu3 detonator fhirstarter</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

@@ -24,16 +24,16 @@ namespace FhirStarter.STU3.Instigator.DotNetCore.Configuration
             RegisterServices(service, fhirStarterSettings);
         }
 
-        public static void SetupFhirServices(IServiceCollection service,IConfigurationRoot appSettings, IConfigurationRoot fhirStarterSettings)
+        public static void SetupFhirServices(IServiceCollection services,IConfigurationRoot appSettings, IConfigurationRoot fhirStarterSettings)
         {
-            RegisterServices(service, fhirStarterSettings);
+            RegisterServices(services, fhirStarterSettings);
         }
 
         #region Assembly
 
         
 
-        private static void RegisterServices(IServiceCollection service, IConfigurationRoot fhirStarterSettings)
+        private static void RegisterServices(IServiceCollection services, IConfigurationRoot fhirStarterSettings)
         {
             var fhirService = typeof(IFhirService);
             var fhirStructureDefinition = typeof(AbstractStructureDefinitionService);
@@ -51,12 +51,12 @@ namespace FhirStarter.STU3.Instigator.DotNetCore.Configuration
                 var types = asm.GetTypes();
                 foreach (var classType in types)
                 {
-                    BindIFhirServices(service, serviceTypes, classType);
+                    BindIFhirServices(services, serviceTypes, classType);
                 }
             }
         }
 
-        private static void BindIFhirServices(IServiceCollection service, List<TypeInitializer> serviceTypes, Type classType)
+        private static void BindIFhirServices(IServiceCollection services, List<TypeInitializer> serviceTypes, Type classType)
         {
             var serviceType = FindType(serviceTypes, classType);
             if (serviceType != null)
@@ -64,14 +64,14 @@ namespace FhirStarter.STU3.Instigator.DotNetCore.Configuration
                 if (serviceType.Name.Equals(nameof(IFhirService)))
                 {
                     var instance = (IFhirService)Activator.CreateInstance(classType);
-                   service.Add(new ServiceDescriptor(typeof(IFhirService), instance));
+                   services.Add(new ServiceDescriptor(typeof(IFhirService), instance));
                     //app.Bind<IFhirService>().ToConstant(instance);
                     _amountOfInitializedIFhirServices++;
                 }
                 else if (serviceType.Name.Equals(nameof(IFhirMockupService)))
                 {
                     var instance = (IFhirMockupService)Activator.CreateInstance(classType);
-                    service.Add(new ServiceDescriptor(typeof(IFhirMockupService), instance));
+                    services.Add(new ServiceDescriptor(typeof(IFhirMockupService), instance));
                     //kernel.Bind<IFhirMockupService>().ToConstant(instance);
                     _amountOfInitializedIFhirMockupServices++;
                 }

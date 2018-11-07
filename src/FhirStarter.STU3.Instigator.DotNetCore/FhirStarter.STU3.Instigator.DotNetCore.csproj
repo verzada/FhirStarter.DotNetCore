@@ -1,11 +1,39 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Authors>verzada, snoopie72</Authors>
+    <Company>Helse Nord IKT</Company>
+    <Product>FhirStarter</Product>
+    <Description>
+      <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+      </div>
+    </Description>
+    <Copyright>Copyright @2018</Copyright>
+    <PackageProjectUrl>https://github.com/verzada/FhirStarter.DotNetCore</PackageProjectUrl>
+    <PackageIconUrl>https://github.com/verzada/FhirStarter.DotNetCore/blob/master/resource/instigatorMatches.png?raw=true</PackageIconUrl>
+    <PackageTags>fhir dotnetcore stu3 instigator fhirstarter</PackageTags>
   </PropertyGroup>
-
+  <!--<ItemGroup>
+    <None Remove="FhirStarterSettings.json" />
+    <None Remove="log4net.config" />
+  </ItemGroup>-->
   <ItemGroup>
+    <Content Include="Configuration\FhirStarterConfig.cs" PackagePath="Configuration\FhirStarterConfig.cs">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="FhirStarterSettings.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.1.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.WebApiCompatShim" Version="2.1.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
@@ -13,9 +41,12 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.1.1" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\FhirStarter.STU3.Detonator.DotNetCore\FhirStarter.STU3.Detonator.DotNetCore.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Compile Update="Configuration\FhirStarterConfig.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
 </Project>

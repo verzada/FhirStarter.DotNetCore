@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 
 namespace FhirStarter.STU3.Instigator.DotNetCore.Extension
 {
+    //https://code-maze.com/global-error-handling-aspnetcore/#builtinmiddleware
+    //Global Error Handling in ASP.NET Core Web API
     public static class OperationOutcomeExceptionMiddlewareExtension
     {
         public static void ConfigureExceptionHandler(this IApplicationBuilder app, ILogger<IFhirService> logger)
@@ -20,7 +22,10 @@ namespace FhirStarter.STU3.Instigator.DotNetCore.Extension
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     context.Response.ContentType = "application/json";
- 
+                    
+                    //todo test headers
+                    var headers = context.Request.Headers;
+                    
                     var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     if (contextFeature != null)
                     {
