@@ -13,19 +13,11 @@
     <PackageIconUrl>https://github.com/verzada/FhirStarter.DotNetCore/blob/master/resource/instigatorMatches.png?raw=true</PackageIconUrl>
     <PackageTags>fhir dotnetcore stu3 instigator fhirstarter</PackageTags>
   </PropertyGroup>
-  <!--<ItemGroup>
-    <None Remove="FhirStarterSettings.json" />
-    <None Remove="log4net.config" />
-  </ItemGroup>-->
-  <ItemGroup>
-    <Content Include="Configuration\FhirStarterConfig.cs" PackagePath="Configuration\FhirStarterConfig.cs">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
+  <ItemGroup Label="FhirStarter Configuration">
     <Content Include="FhirStarterSettings.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="log4net.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
@@ -43,10 +35,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FhirStarter.STU3.Detonator.DotNetCore\FhirStarter.STU3.Detonator.DotNetCore.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Configuration\FhirStarterConfig.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
   </ItemGroup>
 </Project>

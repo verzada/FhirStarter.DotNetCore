@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>FhirStarter.STU3.Detonator.DotNetCore</id>
+    <version>$version$</version>
+    <authors>verzada, snoopie72</authors>
+    <owners>verzada, snoopie72</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>https://github.com/verzada/FhirStarter.DotNetCore</projectUrl>
+    <iconUrl>https://github.com/verzada/FhirStarter.DotNetCore/blob/master/resource/detonatorBomb.png?raw=true</iconUrl>
+    <description>Icons made by https://www.flaticon.com/authors/roundicons"</description>
+    <copyright>Copyright @ 2018</copyright>
+    <tags>fhir dotnetcore stu3 detonator fhirstarter</tags>
+    <dependencies>
+      <group targetFramework=".NETCoreApp2.1">
+        <dependency id="Hl7.Fhir.STU3" version="0.96.0" exclude="Build,Analyzers" />
+        <dependency id="Hl7.Fhir.Specification.STU3" version="0.96.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.Http" version="2.1.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.Http.Extensions" version="2.1.1" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.AspNetCore.Mvc.WebApiCompatShim" version="2.1.3" exclude="Build,Analyzers" />
+        <dependency id="System.Net.Http" version="4.3.4" exclude="Build,Analyzers" />
+        <dependency id="System.Security.Cryptography.Xml" version="4.5.0" exclude="Build,Analyzers" />
+        <dependency id="log4net" version="2.0.8" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
