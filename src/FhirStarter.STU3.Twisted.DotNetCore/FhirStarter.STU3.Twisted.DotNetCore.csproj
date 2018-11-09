@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="FhirStarter.STU3.Instigator.DotNetCore" Version="1.0.0" />
+    <PackageReference Include="Hl7.Fhir.Specification.STU3" Version="0.96.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
   </ItemGroup>
