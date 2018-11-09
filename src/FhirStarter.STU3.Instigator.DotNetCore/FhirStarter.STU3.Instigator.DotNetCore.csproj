@@ -18,6 +18,8 @@ Icons made by https://www.flaticon.com/authors/roundicons</Description>
     <PackageProjectUrl>https://github.com/verzada/FhirStarter.DotNetCore</PackageProjectUrl>
     <PackageIconUrl>https://github.com/verzada/FhirStarter.DotNetCore/blob/master/resource/instigatorMatches.png?raw=true</PackageIconUrl>
     <PackageTags>fhir dotnetcore stu3 instigator fhirstarter</PackageTags>
+    <RepositoryUrl>https://github.com/verzada/FhirStarter.DotNetCore</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
   <ItemGroup Label="FhirStarter Configuration">
     <Content Include="FhirStarterSettings.json">
