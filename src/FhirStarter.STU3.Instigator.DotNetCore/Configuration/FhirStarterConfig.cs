@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using FhirStarter.STU3.Detonator.DotNetCore.Interface;
 using FhirStarter.STU3.Instigator.DotNetCore.Helper;
 using FhirStarter.STU3.Instigator.DotNetCore.Model;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -16,12 +19,27 @@ namespace FhirStarter.STU3.Instigator.DotNetCore.Configuration
         private static int _amountOfIFhirStructureDefinitionsInitialized;
         private static int _amountOfInitializedIFhirMockupServices;
 
-        public static void SetupFhir(IServiceCollection service, ILoggerFactory loggerFactory,
+        public static void SetupFhir(IServiceCollection services, ILoggerFactory loggerFactory,
             IHttpContextAccessor contextAccessor, IConfigurationRoot appSettings, IConfigurationRoot fhirStarterSettings)
         {
-            
+            SetupStandardFhirController(services, fhirStarterSettings);
            SetupLogging(loggerFactory);
-            RegisterServices(service, fhirStarterSettings);
+            RegisterServices(services, fhirStarterSettings);
+        }
+
+        private static void SetupStandardFhirController(IServiceCollection services, IConfigurationRoot fhirStarterSettings)
+        {
+            services.Configure<FhirStarterSettings>(fhirStarterSettings.GetSection(nameof(FhirStarterSettings)));
+            services.AddMvc(config =>
+                {
+                    // Add XML Content Negotiation
+                    config.RespectBrowserAcceptHeader = true;
+                    config.InputFormatters.Add(new XmlSerializerInputFormatter());
+                    config.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+                })
+                //.AddXmlSerializerFormatters()
+                //.AddXmlDataContractSerializerFormatters()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         public static void SetupFhirServices(IServiceCollection services,IConfigurationRoot appSettings, IConfigurationRoot fhirStarterSettings)
