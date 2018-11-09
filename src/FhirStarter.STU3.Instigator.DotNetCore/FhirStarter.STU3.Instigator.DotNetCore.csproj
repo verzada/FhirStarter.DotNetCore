@@ -4,10 +4,16 @@
     <Authors>verzada, snoopie72</Authors>
     <Company>Helse Nord IKT</Company>
     <Product>FhirStarter</Product>
-    <Description>
-      <div>Icons made by <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
-      </div>
-    </Description>
+    <Description>FhirStarter is a lightweight FHIR server framwork where the bare minimum of functionaliy gets your FHIR server up and running. The framework lets you create a FHIR service which can be based on several input sources and is joined a single output.
+
+The Instigator library has the necessary components to setup the FHIR server part of the service. The library will add a specific settings file + a log4net.config file which can be customized. The Detonator library is also necessary to setup the logic bits.
+
+For tutorials, check out the wiki from the project url.
+For current project status, check out the project board for issues and assignment cards.
+
+*NOTE* Hl7.Fhir.Specification.STU3 must be added directly to the FHIR server project (Twisted) for the validator to work.
+
+Icons made by https://www.flaticon.com/authors/roundicons</Description>
     <Copyright>Copyright @2018</Copyright>
     <PackageProjectUrl>https://github.com/verzada/FhirStarter.DotNetCore</PackageProjectUrl>
     <PackageIconUrl>https://github.com/verzada/FhirStarter.DotNetCore/blob/master/resource/instigatorMatches.png?raw=true</PackageIconUrl>

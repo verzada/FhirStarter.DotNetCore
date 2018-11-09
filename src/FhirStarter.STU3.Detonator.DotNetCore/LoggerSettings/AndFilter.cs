@@ -4,7 +4,7 @@ using System.Linq;
 using log4net.Core;
 using log4net.Filter;
 
-namespace FhirStarter.Inferno.STU3.DotnetCore.LoggerSettings
+namespace FhirStarter.STU3.Detonator.DotNetCore.LoggerSettings
 {
     public class AndFilter : FilterSkeleton
     {
