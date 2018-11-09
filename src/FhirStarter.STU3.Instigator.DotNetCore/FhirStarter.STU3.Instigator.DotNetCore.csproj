@@ -20,6 +20,7 @@ Icons made by https://www.flaticon.com/authors/roundicons</Description>
     <PackageTags>fhir dotnetcore stu3 instigator fhirstarter</PackageTags>
     <RepositoryUrl>https://github.com/verzada/FhirStarter.DotNetCore</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
+    <PackageReleaseNotes>This package does not include the specification.zip from HL7.Fhir.Specification.STU3 nuget package in order for the validation to work.</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup Label="FhirStarter Configuration">
     <Content Include="FhirStarterSettings.json">

@@ -22,7 +22,7 @@ Icons made by https://www.flaticon.com/authors/roundicons</Description>
     <PackageProjectUrl>https://github.com/verzada/FhirStarter.DotNetCore</PackageProjectUrl>
     <PackageIconUrl>https://github.com/verzada/FhirStarter.DotNetCore/blob/master/resource/detonatorBomb.png?raw=true</PackageIconUrl>
     <PackageTags>fhir dotnetcore stu3 detonator fhirstarter</PackageTags>
-    <PackageReleaseNotes />
+    <PackageReleaseNotes>This package does not include the specification.zip from HL7.Fhir.Specification.STU3 nuget package in order for the validation to work.</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/verzada/FhirStarter.DotNetCore</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
