@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="Hl7.Fhir.Specification.STU3" Version="0.96.0" />
-    <PackageReference Include="Microsoft.AspNetCore.App" version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.6" />
   </ItemGroup>
