@@ -1,4 +1,11 @@
-﻿using System.Net.Http;
+﻿/* 
+ * Copyright (c) 2018, Firely (info@furore.com) and contributors
+ * See the file CONTRIBUTORS for details.
+ * 
+ * This file is licensed under the BSD 3-Clause license
+ * available at https://raw.github.com/furore-fhir/spark/master/LICENSE
+ */
+using System.Net.Http;
 using FhirStarter.STU3.Detonator.Core.SparkEngine.Core;
 using FhirStarter.STU3.Detonator.Core.SparkEngine.Service;
 using Hl7.Fhir.Rest;
