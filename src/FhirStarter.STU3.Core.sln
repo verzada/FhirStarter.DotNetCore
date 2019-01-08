@@ -3,13 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FhirStarter.Bonfire.DotNetCore", "FhirStarter.Bonfire.DotNetCore\FhirStarter.Bonfire.DotNetCore.csproj", "{658D8C5F-45F9-4A8F-B87E-031A5C15DC91}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FhirStarter.Inferno.STU3.DotnetCore", "FhirStarter.Inferno.STU3.DotnetCore\FhirStarter.Inferno.STU3.DotnetCore.csproj", "{9D6E4AE6-E6D2-47C8-B26A-D143A3CAB0B9}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{27895BAA-E4E0-46D9-962E-20F1D61045A3}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Old Library", "Old Library", "{1D1012B8-674D-44D9-8F6F-FBCF24C4C380}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FhirStarter.STU3.Detonator.Core", "FhirStarter.STU3.Detonator.Core\FhirStarter.STU3.Detonator.Core.csproj", "{388D70B0-CC3A-4F02-A0A7-7441CE47EFBA}"
 EndProject
@@ -23,14 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{658D8C5F-45F9-4A8F-B87E-031A5C15DC91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{658D8C5F-45F9-4A8F-B87E-031A5C15DC91}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{658D8C5F-45F9-4A8F-B87E-031A5C15DC91}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{658D8C5F-45F9-4A8F-B87E-031A5C15DC91}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9D6E4AE6-E6D2-47C8-B26A-D143A3CAB0B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D6E4AE6-E6D2-47C8-B26A-D143A3CAB0B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D6E4AE6-E6D2-47C8-B26A-D143A3CAB0B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D6E4AE6-E6D2-47C8-B26A-D143A3CAB0B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{388D70B0-CC3A-4F02-A0A7-7441CE47EFBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{388D70B0-CC3A-4F02-A0A7-7441CE47EFBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{388D70B0-CC3A-4F02-A0A7-7441CE47EFBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,8 +34,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{658D8C5F-45F9-4A8F-B87E-031A5C15DC91} = {1D1012B8-674D-44D9-8F6F-FBCF24C4C380}
-		{9D6E4AE6-E6D2-47C8-B26A-D143A3CAB0B9} = {1D1012B8-674D-44D9-8F6F-FBCF24C4C380}
 		{388D70B0-CC3A-4F02-A0A7-7441CE47EFBA} = {27895BAA-E4E0-46D9-962E-20F1D61045A3}
 		{E7A16BAC-C498-4BFF-84F4-67D672FAE82C} = {27895BAA-E4E0-46D9-962E-20F1D61045A3}
 	EndGlobalSection

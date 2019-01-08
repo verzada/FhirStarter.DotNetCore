@@ -6,6 +6,7 @@ using FhirStarter.STU3.Instigator.Core.Extension;
 using FhirStarter.STU3.Instigator.Core.Helper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -29,8 +30,7 @@ namespace FhirStarter.STU3.Twisted.Core
 
             var fhirStarterSettings =
                 StartupConfigHelper.BuildConfigurationFromJson(AppContext.BaseDirectory, "FhirStarterSettings.json");
-            //FhirStarterConfig.SetupFhirServices(services, fhirStarterSettings);
-            FhirStarterConfig.SetupFhir(services, fhirStarterSettings);
+            FhirStarterConfig.SetupFhir(services, fhirStarterSettings, CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,7 +41,7 @@ namespace FhirStarter.STU3.Twisted.Core
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMiddleware<HeaderValidation>();
+            //app.UseMiddleware<HeaderValidation>();
             // To get OperationOutcome add this feature
             app.ConfigureExceptionHandler(logger);
 

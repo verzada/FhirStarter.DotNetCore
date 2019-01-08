@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
+using FhirStarter.STU3.Detonator.Core.Formatters;
 using FhirStarter.STU3.Detonator.Core.Interface;
 using FhirStarter.STU3.Instigator.Core.Helper;
 using FhirStarter.STU3.Instigator.Core.Model;
@@ -17,25 +17,24 @@ namespace FhirStarter.STU3.Instigator.Core.Configuration
         private static int _amountOfIFhirStructureDefinitionsInitialized;
         private static int _amountOfInitializedIFhirMockupServices;
 
-        public static void SetupFhir(IServiceCollection services, IConfigurationRoot fhirStarterSettings)
+        public static void SetupFhir(IServiceCollection services, IConfigurationRoot fhirStarterSettings, CompatibilityVersion dotNetCoreVersion)
         {
-            SetupHeadersAndController(services, fhirStarterSettings);
+            SetupHeadersAndController(services, fhirStarterSettings, dotNetCoreVersion);
             RegisterServices(services, fhirStarterSettings);
         }
 
-        private static void SetupHeadersAndController(IServiceCollection services, IConfigurationRoot fhirStarterSettings)
+        private static void SetupHeadersAndController(IServiceCollection services, IConfigurationRoot fhirStarterSettings, CompatibilityVersion dotNetCoreVersion)
         {
             services.Configure<FhirStarterSettings>(fhirStarterSettings.GetSection(nameof(FhirStarterSettings)));
             services.AddMvc(options =>
                 {
-                    options.RespectBrowserAcceptHeader = true;
-                    options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
-                    options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
-                    options.FormatterMappings.SetMediaTypeMappingForFormat("xml", "application/xml");
+                    options.OutputFormatters.Clear();
+                  options.RespectBrowserAcceptHeader = true;
+                  options.OutputFormatters.Add(new XmlFhirSerializerOutputFormatter());
+                  options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+                  options.OutputFormatters.Add(new JsonFhirFormatter());
                 })
-                .AddXmlSerializerFormatters().AddXmlDataContractSerializerFormatters()
-                //.AddApplicationPart(Assembly.Load(new AssemblyName("FhirStarter.STU3.Instigator.Core")))
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+                .SetCompatibilityVersion(dotNetCoreVersion);
         }
 
         #region Assembly

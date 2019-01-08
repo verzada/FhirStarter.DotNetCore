@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using FhirStarter.STU3.Detonator.Core.Interface;
 using FhirStarter.STU3.Detonator.Core.SparkEngine.Extensions;
 using FhirStarter.STU3.Instigator.Core.Helper;
@@ -75,7 +76,7 @@ namespace FhirStarter.STU3.Instigator.Core.Controllers
         #endregion structure definitions
 
         [HttpGet, Route("fhir/{type}"),FormatFilter]
-        public IActionResult Read(string type)
+        public ActionResult Read(string type)
         {
             _log.LogInformation("This works!");
 
@@ -103,13 +104,17 @@ namespace FhirStarter.STU3.Instigator.Core.Controllers
         }
 
         [HttpGet, Route("{type}/{id}"), Route("{type}/identifier/{id}")]
-        public IActionResult Read(string type, string id)
+        public async Task<ActionResult<Base>> Read(string type, string id)
         {
             _log.LogInformation("Request with string id: " + id);
             var service = ControllerHelper.GetFhirService(type, HttpContext.RequestServices);
             var result = service.Read(id);
             _log.LogInformation("Result returned");
-            return Ok(result);
+            //return Ok(result);
+
+            //var okObject = new OkObjectResult(new {message = "200 OK", result});
+            //return okObject;
+            return result;
         }
 
         [HttpGet, Route("")]
