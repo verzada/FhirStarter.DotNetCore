@@ -1,7 +1,7 @@
 {
   "FhirStarterSettings":
   {
-    "FhirServiceAssemblies": ["FhirStarter.STU3.Twisted.Core"],
+    "FhirServiceAssemblies": ["FhirStarter.R4.Twisted.Core"],
     "MockupEnabled":  "false",
     "EnableValidation":  "false",
     "LogRequestWhenError":  "false",
