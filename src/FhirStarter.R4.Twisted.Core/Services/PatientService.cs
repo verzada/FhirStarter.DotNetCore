@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
 using System.Reflection;
 using System.Xml.Linq;
 using FhirStarter.R4.Detonator.Core.Helper;
@@ -12,6 +11,7 @@ using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Hl7.Fhir.Serialization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FhirStarter.R4.Twisted.Core.Services
 {
@@ -29,9 +29,9 @@ namespace FhirStarter.R4.Twisted.Core.Services
             return nameof(Patient);
         }
 
-        public HttpResponseMessage Create(IKey key, Resource resource)
+        public Base Create(IKey key, Resource resource)
         {
-            return new HttpResponseMessage();
+            throw new NotImplementedException();
         }
 
         public Base Read(SearchParams searchParams)
@@ -71,17 +71,17 @@ namespace FhirStarter.R4.Twisted.Core.Services
             return MockPatient();
         }
 
-        public HttpResponseMessage Update(IKey key, Resource resource)
+        public ActionResult Update(IKey key, Resource resource)
         {
             throw new NotImplementedException();
         }
 
-        public HttpResponseMessage Delete(IKey key)
+        public ActionResult Delete(IKey key)
         {
             throw new NotImplementedException();
         }
 
-        public HttpResponseMessage Patch(IKey key, Resource resource)
+        public ActionResult Patch(IKey key, Resource resource)
         {
             throw new NotImplementedException();
         }

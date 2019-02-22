@@ -1,164 +1,193 @@
 ﻿using System;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
 using FhirStarter.R4.Detonator.Core.Interface;
+using FhirStarter.R4.Detonator.Core.SparkEngine.Core;
 using FhirStarter.R4.Detonator.Core.SparkEngine.Extensions;
 using FhirStarter.R4.Instigator.Core.Helper;
 using Hl7.Fhir.Model;
-using Hl7.Fhir.Rest;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 namespace FhirStarter.R4.Instigator.Core.Controllers
 {
-    [Route("fhir"), EnableCors]
-    public class FhirController : Controller
+    public partial class FhirController : Controller
     {
-        private readonly AbstractStructureDefinitionService _abstractStructureDefinitionService;
-        private ILogger<IFhirService> _log;
-
-        //public FhirController(AbstractStructureDefinitionService abstractStructureDefinitionService)
-        //{
-        //    _abstractStructureDefinitionService = abstractStructureDefinitionService;
-        //}
-        public FhirController(ILogger<IFhirService> loggerFactory)
+        #region HelperMethods
+        private ActionResult HandleServiceReadWithSearchParams(string type)
         {
-            _log = loggerFactory;
-        }
-
-        #region structure definitions
-
-        [HttpGet, Route("StructureDefinition/{nspace}/{id}")]
-        public HttpResponseMessage GetStructureDefinition(string nspace, string id)
-        {
-            var structureDefinition = Load(false, id, nspace);
-            if (structureDefinition == null)
-                throw new FhirOperationException($"{nameof(StructureDefinition)} for {nspace}/{id} not found",
-                    HttpStatusCode.InternalServerError);
-            return SendResponse(structureDefinition);
-        }
-
-        [HttpGet, Route("StructureDefinition/{id}")]
-        public HttpResponseMessage GetStructureDefinition(string id)
-        {
-            var structureDefinition = Load(false, id);
-            if (structureDefinition == null)
-                throw new FhirOperationException($"{nameof(StructureDefinition)} for {id} not found",
-                    HttpStatusCode.InternalServerError);
-            return SendResponse(structureDefinition);
-        }
-
-        private StructureDefinition Load(bool excactMatch, string id, string nspace = null)
-        {
-            string lookup;
-            if (string.IsNullOrEmpty(nspace))
-            {
-                lookup = id;
-            }
-            else
-            {
-                lookup = nspace + "/" + id;
-            }
-
-            var structureDefinitions = _abstractStructureDefinitionService.GetStructureDefinitions();
-            return excactMatch
-                ? structureDefinitions.FirstOrDefault(definition => definition.Type.Equals(lookup))
-                : structureDefinitions.FirstOrDefault(definition => definition.Url.EndsWith(lookup));
-
-        }
-
-        #endregion structure definitions
-
-        [HttpGet, Route("fhir/{type}"),FormatFilter]
-        public ActionResult Read(string type)
-        {
-            _log.LogInformation("This works!");
-
             var searchParams = Request.GetSearchParams();
             var service = ControllerHelper.GetFhirService(type, HttpContext.RequestServices);
+            if (service != null)
+            {
+                var result = service.Read(searchParams);
+                return HandleResult(result);
+            }
+            throw new ArgumentException($"The resource {type} service does not exist!");
+        }
 
-            var result = service.Read(searchParams);
-            //var services = HttpContext;
-            //if (services != null)
-            //{
-            //    var lala = GetFhirService(type, services.RequestServices);
-            //    var request = services.RequestServices.GetService<IEnumerable<IFhirService>>().FirstOrDefault(p => p.GetServiceResourceReference().Equals(type));
-            //}
+        private ActionResult HandleServiceRead(string type, string id)
+        {
+            var service = ControllerHelper.GetFhirService(type, HttpContext.RequestServices);
+            if (service != null)
+            {
+                var result = service.Read(id);
+                return HandleResult(result);
+            }
+            throw new ArgumentException($"The resource {type} service does not exist!");
+        }
 
-            //var test = searchParams;
-
-            //var service = _handler.FindServiceFromList(_fhirServices, _fhirMockupServices, type);
-            //var parameters = Request.GetSearchParams();
-            //if (!(parameters.Parameters.Count > 0)) return new HttpResponseMessage(HttpStatusCode.ExpectationFailed);
-            //var results = service.Read(parameters);
-           // return SendResponse(result);
-            //return result;
-            //var returnObject = (object) result;
+        private ActionResult HandleResult(Base result)
+        {
+            if (result is OperationOutcome)
+            {
+                return BadRequest(result);
+            }
             return Ok(result);
         }
 
-        [HttpGet, Route("{type}/{id}"), Route("{type}/identifier/{id}")]
-        public async Task<ActionResult<Base>> Read(string type, string id)
+        private ActionResult ResourceCreate(string type, Resource resource, IFhirBaseService service)
         {
-            _log.LogInformation("Request with string id: " + id);
-            var service = ControllerHelper.GetFhirService(type, HttpContext.RequestServices);
-            var result = service.Read(id);
-            _log.LogInformation("Result returned");
-            //return Ok(result);
+            if (service != null && !string.IsNullOrEmpty(type) && resource != null)
+            {
+                var key = Key.Create(type);
+                var result = service.Create(key, resource);
+                if (result != null)
+                {
+                    if (result is OperationOutcome)
+                    {
+                        return BadRequest(result);
+                    }
+                    return Ok(result);
+                }
+            }
+            return BadRequest($"Service for resource {nameof(resource)} must exist.");
+        }
 
-            //var okObject = new OkObjectResult(new {message = "200 OK", result});
-            //return okObject;
-            return result;
+        public ActionResult ResourceUpdate(string type, string id, Resource resource, IFhirBaseService service)
+        {
+            if (service == null || string.IsNullOrEmpty(type) || resource == null || string.IsNullOrEmpty(id))
+                throw new ArgumentException("Service is null, cannot update resource of type " + type);
+            var key = Key.Create(type, id);
+            var result = service.Update(key, resource);
+            if (result != null)
+                return Ok(result);
+            return BadRequest($"Service is null, cannot update resource of {type}");
+        }
+
+        public ActionResult ResourceDelete(string type, Key key, IFhirBaseService service)
+        {
+            if (service != null)
+            {
+                var result = service.Delete(key);
+                return result;
+            }
+           return BadRequest($"Service is null, cannot update resource of {type}");
+        }
+
+        public ActionResult ResourcePatch(string type, IKey key, Resource resource, IFhirBaseService service)
+        {
+            if (service != null)
+            {
+                var result = service.Patch(key, resource);
+                return result;
+            }
+            return BadRequest($"Service is null, cannot update resource of {type}");
+        }
+
+        #endregion HelperMethods
+
+        [HttpGet, Route("{type}/{id}"), Route("{type}/identifier/{id}")]
+        public ActionResult Read(string type, string id)
+        {
+            return HandleServiceRead(type, id);
+        }
+
+        [HttpGet, Route("fhir/{type}"), FormatFilter]
+        public ActionResult Read(string type)
+        {
+            return HandleServiceReadWithSearchParams(type);
         }
 
         [HttpGet, Route("")]
         // ReSharper disable once InconsistentNaming
-        public HttpResponseMessage Query(string _query)
-     {
-         throw new NotImplementedException();
-     }
+        public ActionResult Query(string type, string _query)
+        {
+            return HandleServiceReadWithSearchParams(type);
+        }
 
+        // return 201 when created
+        // return 202 when takes too long
         [HttpPost, Route("{type}")]
-        public HttpResponseMessage Create(string type, Resource resource)
+        public ActionResult Create(string type, Resource resource)
         {
-           throw new NotImplementedException();
+            if (ValidationEnabled)
+            {
+                resource = (Resource) ValidateResource(resource, true);
+            }
+            if (resource is OperationOutcome)
+            {
+                return BadRequest(resource);
+            }
+            var service = ControllerHelper.GetFhirService(type, HttpContext.RequestServices);
+            return ResourceCreate(type, resource, service);
         }
 
+        // return 201 when created
+        // return 202 when takes too long
         [HttpPut, Route("{type}/{id}")]
-        public HttpResponseMessage Update(string type, string id, Resource resource)
+        public ActionResult Update(string type, string id, Resource resource)
         {
-           throw new NotImplementedException();
+            if (ValidationEnabled)
+            {
+                resource = (Resource) ValidateResource(resource, true);
+            }
+            if (resource is OperationOutcome)
+            {
+                return BadRequest(resource);
+            }
+            var service = ControllerHelper.GetFhirService(type, HttpContext.RequestServices);
+            return ResourceUpdate(type, id, resource, service);
         }
 
+        // return 201 when created
+        // return 202 when takes too long
         [HttpDelete, Route("{type}/{id}")]
-        public HttpResponseMessage Delete(string type, string id)
+        public ActionResult Delete(string type, string id)
         {
-           
-            throw new NotImplementedException();
+            var service = ControllerHelper.GetFhirService(type, HttpContext.RequestServices);
+            if (service != null)
+            {
+                var result = ResourceDelete(type, Key.Create(id), service);
+                return result;
+            }
+            return BadRequest($"Service is null, cannot delete resource of {type} and id {id}");
         }
 
+        // return 201 when created
+        // return 202 when takes too long
         [HttpPatch, Route("{type}/{id}")]
-        public HttpResponseMessage Patch(string type, string id, Resource resource)
+        public ActionResult Patch(string type, string id, Resource resource)
         {
-           
-            throw new NotImplementedException();
-           }
-
+            var service = ControllerHelper.GetFhirService(type, HttpContext.RequestServices);
+            if (service != null)
+            {
+                var result = ResourcePatch(type, Key.Create(id), resource, service);
+                return result;
+            }
+            return BadRequest($"Service is null, cannot delete resource of {type} and id {id}");
+        }
 
         [HttpGet, Route("metadata")]
-        public HttpResponseMessage MetaData()
+        public ActionResult MetaData()
         {
+            //return SendResponse(new CapabilityStatement());
+
+            return Ok(new CapabilityStatement());
+
             throw new NotImplementedException();
 
             var headers = Request.Headers;
             var accept = headers;
-           var returnJson = accept[HeaderNames.ContentType] == "application/json";
+            var returnJson = accept[HeaderNames.ContentType] == "application/json";
             var whatis = accept[HeaderNames.ContentType];
             var returnXml = accept[HeaderNames.ContentType] == "application/xml";
             //var returnJson = accept.Any(x => x.Contains(FhirMediaType.HeaderTypeJson));
@@ -185,96 +214,5 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
             //return response;
             return null;
         }
-
-
-        #region private methods
-
-        private HttpResponseMessage SendResponse(Base resource)
-        {
-            var searchParams = Request.GetSearchParams();
-            var format = searchParams.Parameters.FirstOrDefault(p => p.Item1.Contains("_format"));
-
-            var headers = Request.Headers;
-            //var accept = headers.;
-
-            //var returnJson = ReturnJson(accept);
-            //if (!(resource is OperationOutcome))
-            //{
-            //    resource = ValidateResource((Resource) resource, false);
-            //}
-
-            //StringContent httpContent;
-            //if (!returnJson)
-            //{
-            //    var xmlSerializer = new FhirXmlSerializer();
-            //    httpContent =
-            //        GetHttpContent(xmlSerializer.SerializeToString(resource), FhirMediaType.XmlResource);
-            //}
-            //else
-            //{
-            //    var jsonSerializer = new FhirJsonSerializer();
-            //    httpContent =
-            //        GetHttpContent(jsonSerializer.SerializeToString(resource), FhirMediaType.JsonResource);
-            //}
-            //var response = new HttpResponseMessage(HttpStatusCode.OK) {
-            //    Content = httpContent
-            //};
-            //return response;
-            return null;
-        }
-
-        private Base ValidateResource(Resource resource, bool isInput)
-        {
-            //lock (ValidationLock)
-            //{
-            //    if (_profileValidator == null) return resource;
-            //    if (resource is OperationOutcome) return resource;
-            //    {
-            //        var resourceName = resource.TypeName;
-            //        var structureDefinition = Load(true, resourceName);
-            //        if (structureDefinition != null)
-            //        {
-            //            var found = resource.Meta != null && resource.Meta.ProfileElement.Count == 1 &&
-            //                        resource.Meta.ProfileElement[0].Value.Equals(structureDefinition.Url);
-            //            if (!found)
-            //            {
-            //                var message = $"Profile for {resourceName} must be set to: {structureDefinition.Url}";
-            //                if (isInput)
-            //                {
-            //                    throw new ValidateInputException(message);
-            //                }
-
-            //                throw new ValidateOutputException(message);
-
-            //            }
-            //        }
-
-            //    }
-            //    var validationResult = _profileValidator.Validate(resource, true, false);
-            //    if (validationResult.Issue.Count > 0)
-            //    {
-            //        resource = validationResult;
-            //    }
-            //    return resource;
-            //}            
-            return null;
-        }
-        private static bool ReturnJson(HttpHeaderValueCollection<MediaTypeWithQualityHeaderValue> accept)
-        {
-            var jsonHeaders = ContentType.JSON_CONTENT_HEADERS;
-            var returnJson = false;
-            foreach (var x in accept)
-            {
-                if (jsonHeaders.Any(y => x.MediaType.Contains(y)))
-                {
-                    returnJson = true;
-                }
-            }
-            return returnJson;
-        }
-        #endregion private methods
     }
-
-    
-
 }

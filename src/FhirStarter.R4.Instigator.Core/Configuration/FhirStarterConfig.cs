@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using FhirStarter.R4.Detonator.Core.Formatters;
 using FhirStarter.R4.Detonator.Core.Interface;
 using FhirStarter.R4.Instigator.Core.Helper;
 using FhirStarter.R4.Instigator.Core.Model;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,25 +17,17 @@ namespace FhirStarter.R4.Instigator.Core.Configuration
 
         public static void SetupFhir(IServiceCollection services, IConfigurationRoot fhirStarterSettings, CompatibilityVersion dotNetCoreVersion)
         {
-            SetupHeadersAndController(services, fhirStarterSettings, dotNetCoreVersion);
+         //   SetupHeadersAndController(services, fhirStarterSettings, dotNetCoreVersion);
+             AddFhirStarterSettings(services, fhirStarterSettings);
             RegisterServices(services, fhirStarterSettings);
         }
 
-        private static void SetupHeadersAndController(IServiceCollection services, IConfigurationRoot fhirStarterSettings, CompatibilityVersion dotNetCoreVersion)
-        {
-            services.Configure<FhirStarterSettings>(fhirStarterSettings.GetSection(nameof(FhirStarterSettings)));
-            services.AddMvc(options =>
-                {
-                    options.OutputFormatters.Clear();
-                  options.RespectBrowserAcceptHeader = true;
-                  options.OutputFormatters.Add(new XmlFhirSerializerOutputFormatter());
-                  options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
-                  options.OutputFormatters.Add(new JsonFhirFormatter());
-                })
-                .SetCompatibilityVersion(dotNetCoreVersion);
-        }
-
         #region Assembly
+
+        private static void AddFhirStarterSettings(IServiceCollection services, IConfigurationRoot fhirStarterSettings)
+        {
+            services.Add(new ServiceDescriptor(typeof(IConfigurationRoot),fhirStarterSettings));
+        }
 
         private static void RegisterServices(IServiceCollection services, IConfigurationRoot fhirStarterSettings)
         {
