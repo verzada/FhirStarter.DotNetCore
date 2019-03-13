@@ -11,16 +11,18 @@ The Instigator library has the necessary components to setup the FHIR server par
 For tutorials, check out the wiki from the project url.
 For current project status, check out the project board for issues and assignment cards.
 
-*NOTE* Hl7.Fhir.Specification.STU3 must be added directly to the FHIR server project (Twisted) for the validator to work.
+*NOTE* Hl7.Fhir.Specification.R4 must be added directly to the FHIR server project (Twisted) for the validator to work.
 
 Icons made by https://www.flaticon.com/authors/roundicons</Description>
     <Copyright>Copyright @2018</Copyright>
     <PackageProjectUrl>https://github.com/verzada/FhirStarter.DotNetCore</PackageProjectUrl>
     <PackageIconUrl>https://github.com/verzada/FhirStarter.DotNetCore/blob/master/resource/instigatorMatches.png?raw=true</PackageIconUrl>
-    <PackageTags>fhir dotnetcore stu3 instigator fhirstarter</PackageTags>
+    <PackageTags>fhir dotnetcore R4 instigator fhirstarter</PackageTags>
     <RepositoryUrl>https://github.com/verzada/FhirStarter.DotNetCore</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <PackageReleaseNotes>This package does not include the specification.zip from HL7.Fhir.Specification.STU3 nuget package in order for the validation to work.</PackageReleaseNotes>
+    <PackageReleaseNotes>Previously called Flare. Sets up the web service with a controller.</PackageReleaseNotes>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageLicenseExpressionVersion>1.0.0</PackageLicenseExpressionVersion>
   </PropertyGroup>
   <ItemGroup Label="FhirStarter Configuration">
     <Content Include="FhirStarterSettings.json">

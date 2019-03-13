@@ -12,7 +12,7 @@ There is also logic from FireLy's https://github.com/FirelyTeam/spark code.
 For tutorials, check out the wiki from the project url.
 For current project status, check out the project board for issues and assignment cards.
 
-*NOTE* Hl7.Fhir.Specification.STU3 must be added directly to the FHIR server project (Twisted) for the validator to work.
+*NOTE* Hl7.Fhir.Specification.R4 must be added directly to the FHIR server project (Twisted) for the validator to work.
 
 Icons made by https://www.flaticon.com/authors/roundicons"</Description>
     <Authors>verzada, snoopie72</Authors>
@@ -21,10 +21,12 @@ Icons made by https://www.flaticon.com/authors/roundicons"</Description>
     <Copyright>Copyright @ 2018</Copyright>
     <PackageProjectUrl>https://github.com/verzada/FhirStarter.DotNetCore</PackageProjectUrl>
     <PackageIconUrl>https://github.com/verzada/FhirStarter.DotNetCore/blob/master/resource/detonatorBomb.png?raw=true</PackageIconUrl>
-    <PackageTags>fhir dotnetcore stu3 detonator fhirstarter</PackageTags>
-    <PackageReleaseNotes>This package does not include the specification.zip from HL7.Fhir.Specification.STU3 nuget package in order for the validation to work.</PackageReleaseNotes>
+    <PackageTags>fhir dotnetcore r4 detonator fhirstarter</PackageTags>
+    <PackageReleaseNotes>The main library for FhirStarter R4, previously called Bonfire</PackageReleaseNotes>
     <RepositoryUrl>https://github.com/verzada/FhirStarter.DotNetCore</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageLicenseExpressionVersion>1.0.0</PackageLicenseExpressionVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="SparkEngine\ExceptionHandling\**" />
