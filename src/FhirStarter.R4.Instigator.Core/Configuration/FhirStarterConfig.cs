@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using FhirStarter.R4.Detonator.Core.Interface;
 using FhirStarter.R4.Instigator.Core.Helper;
 using FhirStarter.R4.Instigator.Core.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyModel;
 
 namespace FhirStarter.R4.Instigator.Core.Configuration
 {
@@ -20,6 +22,44 @@ namespace FhirStarter.R4.Instigator.Core.Configuration
          //   SetupHeadersAndController(services, fhirStarterSettings, dotNetCoreVersion);
              AddFhirStarterSettings(services, fhirStarterSettings);
             RegisterServices(services, fhirStarterSettings);
+        }
+
+        /// <summary>
+        /// Used in AddApplicationPart after .AddMvc
+        /// </summary>
+        /// <returns></returns>
+        public static Assembly GetDetonatorAssembly()
+        {
+            return GetReferencedAssembly("FhirStarter.R4.Detonator.Core");
+        }
+
+        /// <summary>
+        /// Used in AddApplicationPart after .AddMvc
+        ///
+        /// Contains the FhirController, must add AddControllersAsServices after the AddApplicationPart
+        /// ex:
+        /// .AddApplicationPart(instigator).AddApplicationPart(detonator).AddControllersAsServices()
+        /// </summary>
+        /// <returns></returns>
+        public static Assembly GetInstigatorAssembly()
+        {
+            return GetReferencedAssembly("FhirStarter.R4.Instigator.Core");
+        }
+
+        //https://github.com/dotnet/corefx/issues/11639
+        private static Assembly GetReferencedAssembly(string assemblyName)
+        {
+            var dependencies = DependencyContext.Default.RuntimeLibraries;
+            foreach (var library in dependencies)
+            {
+                if (library.Name.ToLower().Equals(assemblyName.ToLower()))
+                {
+                    var assembly = Assembly.Load(new AssemblyName(library.Name));
+                    return assembly;
+                }
+            }
+            throw new ArgumentException($"Could not find {assemblyName} in DependencyContext. Is the assembly added to the main project?");
+            
         }
 
         #region Assembly

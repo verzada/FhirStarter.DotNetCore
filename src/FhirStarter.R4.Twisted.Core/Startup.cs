@@ -28,12 +28,18 @@ namespace FhirStarter.R4.Twisted.Core
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var appSettings =
-                StartupConfigHelper.BuildConfigurationFromJson(Directory.GetCurrentDirectory(), "appSettings.json");
+            FhirSetup(services);
+        }
 
+        // Copy this method
+        private void FhirSetup(IServiceCollection services)
+        {
             var fhirStarterSettings =
                 StartupConfigHelper.BuildConfigurationFromJson(AppContext.BaseDirectory, "FhirStarterSettings.json");
             FhirStarterConfig.SetupFhir(services, fhirStarterSettings, CompatibilityVersion.Version_2_2);
+
+            var detonator = FhirStarterConfig.GetDetonatorAssembly();
+            var instigator = FhirStarterConfig.GetInstigatorAssembly();
 
             services.Configure<FhirStarterSettings>(fhirStarterSettings.GetSection(nameof(FhirStarterSettings)));
             services.AddMvc(options =>
@@ -44,8 +50,10 @@ namespace FhirStarter.R4.Twisted.Core
                     options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
                     options.OutputFormatters.Add(new JsonFhirFormatter());
                 })
+                .AddApplicationPart(instigator).AddApplicationPart(detonator).AddControllersAsServices()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILogger<IFhirService> logger)
