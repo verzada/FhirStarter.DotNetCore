@@ -28,7 +28,7 @@ namespace FhirStarter.R4.Instigator.Core.Configuration
         /// Used in AddApplicationPart after .AddMvc
         /// </summary>
         /// <returns></returns>
-        public static Assembly GetDetonatorAssembly()
+        public static Assembly GetDetonatorAssembly() 
         {
             return GetReferencedAssembly("FhirStarter.R4.Detonator.Core");
         }
