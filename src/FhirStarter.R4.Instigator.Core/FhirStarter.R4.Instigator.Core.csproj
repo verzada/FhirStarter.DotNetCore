@@ -24,15 +24,9 @@ Icons made by https://www.flaticon.com/authors/roundicons</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageLicenseExpressionVersion>1.0.0</PackageLicenseExpressionVersion>
   </PropertyGroup>
-  <ItemGroup Label="FhirStarter Configuration">
-    <Content Include="FhirStarterSettings.json">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="log4net.config">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+  <ItemGroup>
+    <None Remove="FhirStarterSettings.json" />
+    <None Remove="log4net.config" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Hl7.Fhir.Specification.R4" Version="0.96.1">

@@ -16,6 +16,11 @@ namespace FhirStarter.R4.Instigator.Core.Helper
 
                 return configuration;
             }
+
+            if (string.IsNullOrEmpty(settingsFilename))
+            {
+                throw new ArgumentException($"Add {settingsFilename} to the FHIR server project. Check https://github.com/verzada/FhirStarter.DotNetCore for more details");
+            }
             throw new ArgumentNullException($"{nameof(basePath)} or {nameof(settingsFilename)} input to {nameof(BuildConfigurationFromJson)} cannot be null or empty.");
         }
     }
