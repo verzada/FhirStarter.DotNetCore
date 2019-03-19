@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,19 +22,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FhirStarter.R4.Detonator.Core" Version="4.0.21" />
+    <PackageReference Include="FhirStarter.R4.Instigator.Core" Version="4.0.21" />
     <PackageReference Include="Hl7.Fhir.R4" Version="0.96.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.6" />
-    <PackageReference Include="PatientAdministration.Person.Lib" Version="1.0.0.8" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FhirStarter.R4.Detonator.Core\FhirStarter.R4.Detonator.Core.csproj" />
-    <ProjectReference Include="..\FhirStarter.R4.Instigator.Core\FhirStarter.R4.Instigator.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Update="C:\Users\adminhsh\.nuget\packages\fhirstarter.stu3.instigator.dotnetcore\1.0.0\contentFiles\any\netcoreapp2.1\FhirStarterSettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -41,10 +41,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="FhirStarterSettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Update="log4net.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 

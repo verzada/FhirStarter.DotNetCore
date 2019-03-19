@@ -1,0 +1,10 @@
+{
+  "FhirStarterSettings":
+  {
+    "FhirServiceAssemblies": ["FhirStarter.R4.Twisted.Core.Nuget"],
+    "MockupEnabled":  "false",
+    "EnableValidation":  "false",
+    "LogRequestWhenError":  "false",
+    "FhirPublisher":  "ACME"
+  }
+}
