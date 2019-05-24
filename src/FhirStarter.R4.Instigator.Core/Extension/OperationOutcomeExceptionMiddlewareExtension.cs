@@ -30,15 +30,13 @@ namespace FhirStarter.R4.Instigator.Core.Extension
                         var issue = new OperationOutcome.IssueComponent
                         {
                             Details = new CodeableConcept(nameof(HttpError), nameof(HttpError),
-                                contextFeature.Error.Message)
+                                contextFeature.Error.Message),
+                            Diagnostics = contextFeature.Error.StackTrace
                         };
                         var outcome = new OperationOutcome();
                         outcome.Issue.Add(issue);
-                        
-                        var fhirSerializer = new FhirXmlSerializer();
                         var fhirJsonSerializer = new FhirJsonSerializer();
                         var outcomeStr = fhirJsonSerializer.SerializeToString(outcome);
-
                         await context.Response.WriteAsync(outcomeStr);
                     }
                 });
