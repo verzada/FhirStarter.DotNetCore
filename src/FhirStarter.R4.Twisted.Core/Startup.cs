@@ -1,18 +1,23 @@
 ﻿using System;
 using System.IO;
+using FhirStarter.R4.Detonator.Core.Filter;
 using FhirStarter.R4.Detonator.Core.Formatters;
 using FhirStarter.R4.Detonator.Core.Interface;
 using FhirStarter.R4.Instigator.Core.Configuration;
 using FhirStarter.R4.Instigator.Core.Extension;
 using FhirStarter.R4.Instigator.Core.Helper;
 using FhirStarter.R4.Instigator.Core.Model;
+using Hl7.Fhir.Serialization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace FhirStarter.R4.Twisted.Core
 {
@@ -63,10 +68,20 @@ namespace FhirStarter.R4.Twisted.Core
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseMiddleware<HeaderValidation>();
-            // To get OperationOutcome add this feature
+            app.UseExceptionHandler(a => a.Run(async context =>
+            {
+                var feature = context.Features.Get<IExceptionHandlerPathFeature>();
+                if (feature?.Error != null)
+                {
+                    var exception = feature.Error;
 
-
+                    var operationOutcome = ErrorHandlingMiddleware.GetOperationOutCome(exception, true);
+                    var fhirJsonConverter = new FhirJsonSerializer();
+                    var result = fhirJsonConverter.SerializeToString(operationOutcome);
+                    context.Response.ContentType = "application/json";
+                    await context.Response.WriteAsync(result);
+                }
+            }));
 
             app.ConfigureExceptionHandler(logger);
             app.UseMvc();

@@ -7,6 +7,7 @@ using FhirStarter.R4.Instigator.Core.Extension;
 using FhirStarter.R4.Instigator.Core.Helper;
 using FhirStarter.R4.Instigator.Core.Model;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -65,7 +66,14 @@ namespace FhirStarter.R4.Twisted.Core
 
             //app.UseMiddleware<HeaderValidation>();
             // To get OperationOutcome add this feature
+            app.UseExceptionHandler(a => a.Run(async context =>
+            {
+                var feature = context.Features.Get<IExceptionHandlerPathFeature>();
+                var exception = feature.Error;
+                
+              //  var operationOutcome = FhirStarter.R4.Detonator.Core.Fiter.ErrorHandlingMiddleware.
 
+            }));
 
 
             app.ConfigureExceptionHandler(logger);

@@ -68,6 +68,7 @@ namespace FhirStarter.R4.Twisted.Core.Services
 
         public Base Read(string id)
         {
+            throw new ArgumentException($"Please throw an {nameof(ArgumentException)} and create an {nameof(OperationOutcome)} of it");
             return MockPatient();
         }
 
