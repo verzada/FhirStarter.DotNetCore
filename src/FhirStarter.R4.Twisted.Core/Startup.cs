@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using FhirStarter.R4.Detonator.Core.Filter;
 using FhirStarter.R4.Detonator.Core.Formatters;
 using FhirStarter.R4.Detonator.Core.Interface;
@@ -17,7 +16,6 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace FhirStarter.R4.Twisted.Core
 {
@@ -40,7 +38,7 @@ namespace FhirStarter.R4.Twisted.Core
         private void FhirSetup(IServiceCollection services)
         {
             var fhirStarterSettings =
-                StartupConfigHelper.BuildConfigurationFromJson(AppContext.BaseDirectory, "FhirStarterSettings.json");
+                StartupConfigHelper.BuildConfigurationFromJson(AppContext.BaseDirectory, "appsettings.json");
             FhirStarterConfig.SetupFhir(services, fhirStarterSettings, CompatibilityVersion.Version_2_2);
 
             var detonator = FhirStarterConfig.GetDetonatorAssembly();

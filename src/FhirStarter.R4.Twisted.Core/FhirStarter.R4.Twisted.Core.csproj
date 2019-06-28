@@ -34,13 +34,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="C:\Users\adminhsh\.nuget\packages\fhirstarter.stu3.instigator.dotnetcore\1.0.0\contentFiles\any\netcoreapp2.1\FhirStarterSettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="C:\Users\adminhsh\.nuget\packages\fhirstarter.stu3.instigator.dotnetcore\1.0.0\contentFiles\any\netcoreapp2.1\log4net.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="FhirStarterSettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="log4net.config">

@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Net.Http;
 using FhirStarter.R4.Detonator.Core.Interface;
 using FhirStarter.R4.Detonator.Core.SparkEngine.Core;
 using FhirStarter.R4.Detonator.Core.SparkEngine.Extensions;
 using FhirStarter.R4.Instigator.Core.Helper;
+using FhirStarter.R4.Instigator.Core.Model;
 using Hl7.Fhir.Model;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
+using Microsoft.Extensions.Configuration;
 
 namespace FhirStarter.R4.Instigator.Core.Controllers
 {
@@ -179,40 +181,10 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
         [HttpGet, Route("metadata")]
         public ActionResult MetaData()
         {
-            //return SendResponse(new CapabilityStatement());
+            var httpRequest = HttpContext.Request;
 
-            return Ok(new CapabilityStatement());
-
-            throw new NotImplementedException();
-
-            var headers = Request.Headers;
-            var accept = headers;
-            var returnJson = accept[HeaderNames.ContentType] == "application/json";
-            var whatis = accept[HeaderNames.ContentType];
-            var returnXml = accept[HeaderNames.ContentType] == "application/xml";
-            //var returnJson = accept.Any(x => x.Contains(FhirMediaType.HeaderTypeJson));
-
-            //StringContent httpContent;
-            //var metaData = _handler.CreateMetadata(_fhirServices, _abstractStructureDefinitionService, Request.RequestUri.AbsoluteUri);
-            //if (!returnJson)
-            //{
-            //    var xmlSerializer = new FhirXmlSerializer();
-            //    var xml = xmlSerializer.SerializeToString(metaData);
-            //    httpContent =
-            //        new StringContent(xml, Encoding.UTF8,
-            //            "application/xml");
-            //}
-            //else
-            //{
-            //    var jsonSerializer = new FhirJsonSerializer();
-            //    var json = jsonSerializer.SerializeToString(metaData);
-            //    httpContent =
-            //        new StringContent(json, Encoding.UTF8,
-            //            "application/json");
-            //}
-            //var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = httpContent };
-            //return response;
-            return null;
+            var metaData = ControllerHelper.CreateMetaData(_fhirServices, _abstractStructureDefinitionService, _appSettings, httpRequest);
+            return Ok(metaData);
         }
     }
 }

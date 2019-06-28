@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using FhirStarter.R4.Detonator.Core.Interface;
-using FhirStarter.R4.Instigator.Core.Model;
+using FhirStarter.R4.Instigator.Core.Helper;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -13,32 +14,23 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
     {
         private readonly AbstractStructureDefinitionService _abstractStructureDefinitionService;
         private ILogger<IFhirService> _log;
-        private readonly IConfigurationRoot _fhirStarterSettings;
+        private readonly IConfigurationRoot _appSettings;
+        private IEnumerable<IFhirService> _fhirServices;
 
         private bool ValidationEnabled;
 
         private bool IsMockupEnabled;
         //private AcceptHeaderAttribute _acceptHeaderAttributes;
 
-        public FhirController(ILogger<IFhirService> loggerFactory, IConfigurationRoot fhirStarterSettings)
+        public FhirController(ILogger<IFhirService> loggerFactory, IConfigurationRoot fhirStarterSettings,
+            IServiceProvider serviceProvider)
         {
             _log = loggerFactory;
-            //_acceptHeaderAttributes = new AcceptHeaderAttribute("application/json","application/xml");
-            _fhirStarterSettings = fhirStarterSettings;
+            _appSettings = fhirStarterSettings;
 
-            ValidationEnabled = GetSetting(_fhirStarterSettings, "EnableValidation");
-            IsMockupEnabled = GetSetting(_fhirStarterSettings, "MockupEnabled");
-        }
-
-        private bool GetSetting(IConfigurationRoot fhirStarterSettings, string key)
-        {
-            var keyValue = fhirStarterSettings.GetSection($"FhirStarterSettings:{key}");
-            if (!string.IsNullOrEmpty(keyValue.Value))
-            {
-                bool.TryParse(keyValue.Value, out var keyBool);
-                return keyBool;
-            }
-            throw new ArgumentException($"The setting {key} must be defined in {nameof(FhirStarterSettings)} with a true / false value");
+            ValidationEnabled = ControllerHelper.GetFhirStarterSettingBool(_appSettings, "EnableValidation");
+            IsMockupEnabled = ControllerHelper.GetFhirStarterSettingBool(_appSettings, "MockupEnabled");
+            _fhirServices = ControllerHelper.GetFhirServices(serviceProvider);
         }
     }
 }

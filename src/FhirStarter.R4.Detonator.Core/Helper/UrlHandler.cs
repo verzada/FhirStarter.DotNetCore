@@ -13,7 +13,9 @@ namespace FhirStarter.R4.Detonator.Core.Helper
 
         public static string GetUrlForOperationDefinition(string urlPath, string fhirUrlParameter, string alias)
         {
-            return urlPath + fhirUrlParameter + nameof(OperationDefinition) + "/" + alias;
+            urlPath = urlPath.Replace("metadata","");
+            var combinedUrl = $"{urlPath}{fhirUrlParameter}{nameof(OperationDefinition)}/{alias}";
+            return combinedUrl;
         }
 
         private static string GetParentUrl(HttpContext context, string fhirUrlParameter)

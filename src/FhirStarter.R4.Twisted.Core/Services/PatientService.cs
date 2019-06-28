@@ -111,7 +111,7 @@ namespace FhirStarter.R4.Twisted.Core.Services
             var current = HtmlHelper.GetDisplayUrlFromRequest(request);
              var defintion = new OperationDefinition
             {
-                Url = UrlHandler.GetUrlForOperationDefinition(current, "fhir/", nameof(Patient)),
+                Url = UrlHandler.GetUrlForOperationDefinition(current, string.Empty, nameof(Patient)),
                 Name = GetServiceResourceReference(),
                 Status = PublicationStatus.Active,
                 Kind = OperationDefinition.OperationKind.Query,
