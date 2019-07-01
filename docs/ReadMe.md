@@ -19,4 +19,4 @@ The FhirStarter intends on solving the matter of integrating several data source
 
 ## Getting Started
 
-We've created a guide which helps you along the way to create a FHIR server. Take a look at [Getting started](FHIRService/Getting Started.md) to begin implemented FHIR.
+We've created a guide which helps you along the way to create a FHIR server. Take a look at [Getting started](FHIRService/GettingStarted.md) to begin implemented FHIR.
