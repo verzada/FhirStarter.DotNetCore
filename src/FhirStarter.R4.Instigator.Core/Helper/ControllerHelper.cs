@@ -44,7 +44,7 @@ namespace FhirStarter.R4.Instigator.Core.Helper
             return request;
         }
 
-        public static CapabilityStatement CreateMetaData(IEnumerable<IFhirService> services, AbstractStructureDefinitionService abstractStructureDefinitionService, IConfigurationRoot appSettings, HttpRequest request)
+        public static CapabilityStatement CreateMetaData(IEnumerable<IFhirService> services, IConfigurationRoot appSettings, HttpRequest request)
         {
             var fhirServices = services as IFhirService[] ?? services.ToArray();
             if (!fhirServices.Any())
@@ -73,35 +73,35 @@ namespace FhirStarter.R4.Instigator.Core.Helper
             }
 
             capabilityStatement.Rest =
-                AddSupportedProfiles(capabilityStatement.Rest, abstractStructureDefinitionService);
+                AddSupportedProfiles(capabilityStatement.Rest);
 
             return capabilityStatement;
 
         }
 
         private static List<CapabilityStatement.RestComponent> AddSupportedProfiles(
-            List<CapabilityStatement.RestComponent> restComponents,
-            AbstractStructureDefinitionService abstractStructureDefinitionService)
+            List<CapabilityStatement.RestComponent> restComponents)
         {
 
-            if (restComponents.Any() && abstractStructureDefinitionService != null)
-            {
-                var structureDefinitions = abstractStructureDefinitionService.GetStructureDefinitions();
-                //var profiles = structureDefinitions.Select(structureDefinition =>
-                //    new Canonical() {Url = new Uri(structureDefinition.Url)}).ToList();
+            //if (restComponents.Any())
+            //{
+            //    var structureDefinitions = abstractStructureDefinitionService.GetStructureDefinitions();
+            //    //var profiles = structureDefinitions.Select(structureDefinition =>
+            //    //    new Canonical() {Url = new Uri(structureDefinition.Url)}).ToList();
 
 
-                foreach (var restComponent in restComponents)
-                {
-                    var resources = restComponent.Resource;
-                    foreach (var resource in resources)
-                    {
+            //    foreach (var restComponent in restComponents)
+            //    {
+            //        var resources = restComponent.Resource;
+            //        foreach (var resource in resources)
+            //        {
                         
-                    }
-                }
+            //        }
+            //    }
 
-            }
-            return restComponents;
+            //}
+            //return restComponents;
+            throw new NotImplementedException();
         }
 
         private static string MetaDataName(IEnumerable<IFhirService> services)

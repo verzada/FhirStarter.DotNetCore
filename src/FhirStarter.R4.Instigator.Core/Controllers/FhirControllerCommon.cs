@@ -1,25 +1,27 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using FhirStarter.R4.Detonator.Core.SparkEngine.Core;
+using FhirStarter.R4.Instigator.Core.Validation.Exceptions;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Microsoft.AspNetCore.Http;
 
 namespace FhirStarter.R4.Instigator.Core.Controllers
 {
-   public partial class FhirController
+    public partial class FhirController
     {
 
         private HttpResponseMessage SendResponse(Base resource)
         {
-
             var returnJson = ReturnJson(Request.Headers);
-            if (ValidationEnabled && !(resource is OperationOutcome))
+            if (_validationEnabled && !(resource is OperationOutcome))
             {
-                resource = ValidateResource((Resource)resource, false);
+                resource = ValidateResource((Resource) resource, false);
             }
+
             StringContent httpContent;
             if (!returnJson)
             {
@@ -33,11 +35,13 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
                 httpContent =
                     GetHttpContent(jsonSerializer.SerializeToString(resource), FhirMediaType.JsonResource);
             }
-            var response = new HttpResponseMessage(HttpStatusCode.OK) { Content = httpContent };
+
+            var response = new HttpResponseMessage(HttpStatusCode.OK) {Content = httpContent};
             if (resource is OperationOutcome)
             {
                 response.StatusCode = HttpStatusCode.BadRequest;
             }
+
             return response;
         }
 
@@ -55,12 +59,7 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
             var acceptHeaders =
                 headerDictionary.GetCommaSeparatedValues("Accept");
 
-            if (acceptHeaders.Contains("application/json"))
-            {
-                return true;
-            }
-
-            return false;
+            return acceptHeaders.Contains("application/json");
         }
 
         private static StringContent GetHttpContent(string serializedValue, string resourceType)
@@ -71,40 +70,41 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
 
         private Base ValidateResource(Resource resource, bool isInput)
         {
-            //lock (ValidationLock)
-            //{
-            //    if (_profileValidator == null) return resource;
-            //    if (resource is OperationOutcome) return resource;
-            //    {
-            //        var resourceName = resource.TypeName;
-            //        var structureDefinition = Load(true, resourceName);
-            //        if (structureDefinition != null)
-            //        {
-            //            var found = resource.Meta != null && resource.Meta.ProfileElement.Count == 1 &&
-            //                        resource.Meta.ProfileElement[0].Value.Equals(structureDefinition.Url);
-            //            if (!found)
-            //            {
-            //                var message = $"Profile for {resourceName} must be set to: {structureDefinition.Url}";
-            //                if (isInput)
-            //                {
-            //                    throw new ValidateInputException(message);
-            //                }
 
-            //                throw new ValidateOutputException(message);
+            if (_profileValidator == null) return resource;
+            if (resource is OperationOutcome) return resource;
+            {
+                var resourceName = resource.TypeName;
+                var structureDefinition = Load(true, resourceName);
+                if (structureDefinition != null)
+                {
+                    var found = resource.Meta != null && resource.Meta.ProfileElement.Count == 1 &&
+                                resource.Meta.ProfileElement[0].Value.Equals(structureDefinition.Url);
+                    if (!found)
+                    {
+                        var message = $"Profile for {resourceName} must be set to: {structureDefinition.Url}";
+                        if (isInput)
+                        {
+                            throw new ValidateInputException(message);
+                        }
 
-            //            }
-            //        }
+                        throw new ValidateOutputException(message);
 
-            //    }
-            //    var validationResult = _profileValidator.Validate(resource, true, false);
-            //    if (validationResult.Issue.Count > 0)
-            //    {
-            //        resource = validationResult;
-            //    }
-            //    return resource;
-            //}            
+                    }
+                }
+
+            }
+            var validationResult = _profileValidator.Validate(resource, true, false);
+            if (validationResult.Issue.Count > 0)
+            {
+                resource = validationResult;
+            }
+
             return resource;
         }
-       
+
     }
 }
+
+
+

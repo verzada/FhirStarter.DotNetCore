@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace FhirStarter.R4.Twisted.Core
 {
@@ -52,9 +53,15 @@ namespace FhirStarter.R4.Twisted.Core
                     options.OutputFormatters.Add(new XmlFhirSerializerOutputFormatter());
                     options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
                     options.OutputFormatters.Add(new JsonFhirFormatter());
+                       
+                })
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.Formatting = Formatting.Indented;
                 })
                 .AddApplicationPart(instigator).AddApplicationPart(detonator).AddControllersAsServices()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
         }
 
 

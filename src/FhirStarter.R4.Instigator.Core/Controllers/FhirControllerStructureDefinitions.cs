@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using Hl7.Fhir.Model;
@@ -31,20 +32,22 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
 
         private StructureDefinition Load(bool excactMatch, string id, string nspace = null)
         {
-            string lookup;
-            if (string.IsNullOrEmpty(nspace))
-            {
-                lookup = id;
-            }
-            else
-            {
-                lookup = nspace + "/" + id;
-            }
+            //string lookup;
+            //if (string.IsNullOrEmpty(nspace))
+            //{
+            //    lookup = id;
+            //}
+            //else
+            //{
+            //    lookup = nspace + "/" + id;
+            //}
 
-            var structureDefinitions = _abstractStructureDefinitionService.GetStructureDefinitions();
-            return excactMatch
-                ? structureDefinitions.FirstOrDefault(definition => definition.Type.Equals(lookup))
-                : structureDefinitions.FirstOrDefault(definition => definition.Url.EndsWith(lookup));
+            //var structureDefinitions = _abstractStructureDefinitionService.GetStructureDefinitions();
+            //return excactMatch
+            //    ? structureDefinitions.FirstOrDefault(definition => definition.Type.Equals(lookup))
+            //    : structureDefinitions.FirstOrDefault(definition => definition.Url.EndsWith(lookup));
+
+            throw new NotImplementedException();
 
         }
     }

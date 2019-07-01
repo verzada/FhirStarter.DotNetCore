@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Net.Http;
 using FhirStarter.R4.Detonator.Core.Interface;
 using FhirStarter.R4.Detonator.Core.SparkEngine.Core;
 using FhirStarter.R4.Detonator.Core.SparkEngine.Extensions;
 using FhirStarter.R4.Instigator.Core.Helper;
-using FhirStarter.R4.Instigator.Core.Model;
 using Hl7.Fhir.Model;
+using Hl7.Fhir.Serialization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace FhirStarter.R4.Instigator.Core.Controllers
 {
@@ -18,27 +16,39 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
         {
             var searchParams = Request.GetSearchParams();
             var service = ControllerHelper.GetFhirService(type, HttpContext.RequestServices);
-            if (service != null)
-            {
-                var result = service.Read(searchParams);
-                return HandleResult(result);
-            }
-            throw new ArgumentException($"The resource {type} service does not exist!");
+            if (service == null) throw new ArgumentException($"The resource {type} service does not exist!");
+            var result = service.Read(searchParams);
+            return HandleResult(result);
         }
 
         private ActionResult HandleServiceRead(string type, string id)
         {
             var service = ControllerHelper.GetFhirService(type, HttpContext.RequestServices);
-            if (service != null)
-            {
-                var result = service.Read(id);
-                return HandleResult(result);
-            }
-            throw new ArgumentException($"The resource {type} service does not exist!");
+            if (service == null) throw new ArgumentException($"The resource {type} service does not exist!");
+            var result = service.Read(id);
+            return HandleResult(result);
         }
 
         private ActionResult HandleResult(Base result)
         {
+            if (_validationEnabled)
+            {
+                var validation = _profileValidator.Validate((Resource) result);
+                if (!validation.Success)
+                {
+                    //validation.Issue.Add(new OperationOutcome.IssueComponent
+                    //{
+                    //    //Diagnostics = new FhirJsonSerializer().SerializeToDocument(result).ToString(),
+                        
+                    //});
+                    //result = validation;
+                    validation.Text = new Narrative
+                    {
+                        Div = new FhirXmlSerializer().SerializeToDocument(result).ToString()
+                    };
+                    result = validation;
+                }
+            }
             if (result is OperationOutcome)
             {
                 return BadRequest(result);
@@ -48,20 +58,19 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
 
         private ActionResult ResourceCreate(string type, Resource resource, IFhirBaseService service)
         {
-            if (service != null && !string.IsNullOrEmpty(type) && resource != null)
+            if (service == null || string.IsNullOrEmpty(type) || resource == null)
+                return BadRequest($"Service for resource {nameof(resource)} must exist.");
+            var key = Key.Create(type);
+            var result = service.Create(key, resource);
+            switch (result)
             {
-                var key = Key.Create(type);
-                var result = service.Create(key, resource);
-                if (result != null)
-                {
-                    if (result is OperationOutcome)
-                    {
-                        return BadRequest(result);
-                    }
+                case null:
+                    return BadRequest($"Service for resource {nameof(resource)} must exist.");
+                case OperationOutcome _:
+                    return BadRequest(result);
+                default:
                     return Ok(result);
-                }
             }
-            return BadRequest($"Service for resource {nameof(resource)} must exist.");
         }
 
         public ActionResult ResourceUpdate(string type, string id, Resource resource, IFhirBaseService service)
@@ -77,22 +86,16 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
 
         public ActionResult ResourceDelete(string type, Key key, IFhirBaseService service)
         {
-            if (service != null)
-            {
-                var result = service.Delete(key);
-                return result;
-            }
-           return BadRequest($"Service is null, cannot update resource of {type}");
+            if (service == null) return BadRequest($"Service is null, cannot update resource of {type}");
+            var result = service.Delete(key);
+            return result;
         }
 
         public ActionResult ResourcePatch(string type, IKey key, Resource resource, IFhirBaseService service)
         {
-            if (service != null)
-            {
-                var result = service.Patch(key, resource);
-                return result;
-            }
-            return BadRequest($"Service is null, cannot update resource of {type}");
+            if (service == null) return BadRequest($"Service is null, cannot update resource of {type}");
+            var result = service.Patch(key, resource);
+            return result;
         }
 
         #endregion HelperMethods
@@ -121,7 +124,7 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
         [HttpPost, Route("{type}")]
         public ActionResult Create(string type, Resource resource)
         {
-            if (ValidationEnabled)
+            if (_validationEnabled)
             {
                 resource = (Resource) ValidateResource(resource, true);
             }
@@ -138,7 +141,7 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
         [HttpPut, Route("{type}/{id}")]
         public ActionResult Update(string type, string id, Resource resource)
         {
-            if (ValidationEnabled)
+            if (_validationEnabled)
             {
                 resource = (Resource) ValidateResource(resource, true);
             }
@@ -183,7 +186,7 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
         {
             var httpRequest = HttpContext.Request;
 
-            var metaData = ControllerHelper.CreateMetaData(_fhirServices, _abstractStructureDefinitionService, _appSettings, httpRequest);
+            var metaData = ControllerHelper.CreateMetaData(_fhirServices, _appSettings, httpRequest);
             return Ok(metaData);
         }
     }

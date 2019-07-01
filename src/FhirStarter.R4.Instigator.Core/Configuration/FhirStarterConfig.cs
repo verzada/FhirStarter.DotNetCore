@@ -4,23 +4,21 @@ using System.Reflection;
 using FhirStarter.R4.Detonator.Core.Interface;
 using FhirStarter.R4.Instigator.Core.Helper;
 using FhirStarter.R4.Instigator.Core.Model;
+using FhirStarter.R4.Instigator.Core.Validation;
+using Hl7.Fhir.Validation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyModel;
+using Microsoft.Extensions.Logging;
 
 namespace FhirStarter.R4.Instigator.Core.Configuration
 {
     public static class FhirStarterConfig
     {
-        private static int _amountOfInitializedIFhirServices;
-        private static int _amountOfIFhirStructureDefinitionsInitialized;
-        private static int _amountOfInitializedIFhirMockupServices;
-
         public static void SetupFhir(IServiceCollection services, IConfigurationRoot fhirStarterSettings, CompatibilityVersion dotNetCoreVersion)
         {
-         //   SetupHeadersAndController(services, fhirStarterSettings, dotNetCoreVersion);
-             AddFhirStarterSettings(services, fhirStarterSettings);
+            AddFhirStarterSettings(services, fhirStarterSettings);
             RegisterServices(services, fhirStarterSettings);
         }
 
@@ -72,12 +70,10 @@ namespace FhirStarter.R4.Instigator.Core.Configuration
         private static void RegisterServices(IServiceCollection services, IConfigurationRoot fhirStarterSettings)
         {
             var fhirService = typeof(IFhirService);
-            var fhirStructureDefinition = typeof(AbstractStructureDefinitionService);
 
             var serviceTypes = new List<TypeInitializer>
             {
-                new TypeInitializer(true, fhirService, nameof(IFhirService)),
-                new TypeInitializer(true, fhirStructureDefinition, nameof(AbstractStructureDefinitionService))
+                new TypeInitializer(true, fhirService, nameof(IFhirService))
             };
 
             var fhirServiceAssemblies = FhirStarterSettingsHelper.GetFhirServiceAssemblies(fhirStarterSettings);
@@ -90,6 +86,26 @@ namespace FhirStarter.R4.Instigator.Core.Configuration
                     BindIFhirServices(services, serviceTypes, classType);
                 }
             }
+
+            BindProfileValidator(services);
+        }
+
+        private static void BindProfileValidator(IServiceCollection services)
+        {
+            var profileValidator = new ProfileValidator(GetValidator(), GetLogger());
+            services.Add(new ServiceDescriptor(typeof(IProfileValidator), profileValidator));
+        }
+
+        private static ILogger GetLogger()
+        {
+            var factory = new LoggerFactory();
+            var logger = factory.CreateLogger("FhirStarter");
+            return logger;
+        }
+
+        private static Validator GetValidator()
+        {
+            return ValidatorFactory.GetValidator();
         }
 
         private static void BindIFhirServices(IServiceCollection services, List<TypeInitializer> serviceTypes, Type classType)
@@ -102,14 +118,12 @@ namespace FhirStarter.R4.Instigator.Core.Configuration
                     var instance = (IFhirService)Activator.CreateInstance(classType);
                    services.Add(new ServiceDescriptor(typeof(IFhirService), instance));
                     //app.Bind<IFhirService>().ToConstant(instance);
-                    _amountOfInitializedIFhirServices++;
                 }
                 else if (serviceType.Name.Equals(nameof(IFhirMockupService)))
                 {
                     var instance = (IFhirMockupService)Activator.CreateInstance(classType);
                     services.Add(new ServiceDescriptor(typeof(IFhirMockupService), instance));
                     //kernel.Bind<IFhirMockupService>().ToConstant(instance);
-                    _amountOfInitializedIFhirMockupServices++;
                 }
                 //else if (serviceType.Name.Equals(nameof(AbstractStructureDefinitionService)))
                 //{
@@ -123,8 +137,12 @@ namespace FhirStarter.R4.Instigator.Core.Configuration
                 //    }
                 //    _amountOfIFhirStructureDefinitionsInitialized++;
                 //}
+                //var instance = (IProfileValidator)Activator.CreateInstance(typeof(ProfileValidator));
+                //services.Add(new ServiceDescriptor(typeof(IProfileValidator), GetProfileValidator()));
             }
         }
+
+       
 
         private static TypeInitializer FindType(List<TypeInitializer> serviceTypes, Type classType)
         {

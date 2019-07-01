@@ -45,31 +45,34 @@ namespace FhirStarter.R4.Twisted.Core.Services
                     throw new ArgumentException("Using " + nameof(SearchParams) +
                                                 " in Read(SearchParams searchParams) should throw an exception which is put into an OperationOutcomes issues");
                 }
-                if (parameter.Item1.Contains("log") && parameter.Item2.Contains(nameof(OperationOutcome).ToLower()))
+
+                if (!parameter.Item1.Contains("log") ||
+                    !parameter.Item2.Contains(nameof(OperationOutcome).ToLower())) continue;
+                var operationOutcome = new OperationOutcome{Issue = new List<OperationOutcome.IssueComponent>()};
+                var issue = new OperationOutcome.IssueComponent
                 {
-                    var operationOutcome = new OperationOutcome{Issue = new List<OperationOutcome.IssueComponent>()};
-                    var issue = new OperationOutcome.IssueComponent
-                    {
-                        Severity = OperationOutcome.IssueSeverity.Information,
-                        Code = OperationOutcome.IssueType.Incomplete,
-                        Details = new CodeableConcept("SomeExampleException", typeof(FhirOperationException).ToString(),
-                            "Something expected happened and needs to be handled with more detail.")
-                    };
-                    operationOutcome.Issue.Add(issue);
-                    //var errorMessage = fh
-                    
-                    //var serialized = FhirSerializer.SerializeResourceToXml(operationOutcome);
-                    var serialized = xmlSerializer.SerializeToString(operationOutcome);
-                    throw new ArgumentException(serialized);
-                }
+                    Severity = OperationOutcome.IssueSeverity.Information,
+                    Code = OperationOutcome.IssueType.Incomplete,
+                    Details = new CodeableConcept("SomeExampleException", typeof(FhirOperationException).ToString(),
+                        "Something expected happened and needs to be handled with more detail.")
+                };
+                operationOutcome.Issue.Add(issue);
+                var serialized = xmlSerializer.SerializeToString(operationOutcome);
+                throw new ArgumentException(serialized);
             }
             throw new ArgumentException("Generic error");
         }
 
         public Base Read(string id)
         {
-            throw new ArgumentException($"Please throw an {nameof(ArgumentException)} and create an {nameof(OperationOutcome)} of it");
-            return MockPatient();
+            if (id == "1")
+            {
+                return MockPatient();
+            }
+
+            var patient = MockPatient();
+            patient.Meta.Profile = new List<string>();
+            return patient;
         }
 
         public ActionResult Update(IKey key, Resource resource)
@@ -176,13 +179,13 @@ namespace FhirStarter.R4.Twisted.Core.Services
             return new List<string> { GetServiceResourceReference() };
         }
 
-        private static Base MockPatient()
+        private static Patient MockPatient()
         {
-            var date = new FhirDateTime(DateTime.Now);
+            var date = new FhirDateTime(new DateTimeOffset(DateTime.Now));
 
             return new Patient
             {
-                Meta = new Meta { LastUpdated = date.ToDateTimeOffset(), Profile = new List<string> { "http://helse-nord.no/FHIR/profiles/Identification.Patient/Patient" } },
+                Meta = new Meta { LastUpdated = date.ToDateTimeOffset(new TimeSpan()), Profile = new List<string> { "http://helse-nord.no/FHIR/profiles/Identification.Patient/Patient" } },
                 Id = "12345678901",
                 Active = true,
                 Name =
