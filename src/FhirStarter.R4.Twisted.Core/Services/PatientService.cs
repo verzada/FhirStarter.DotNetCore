@@ -112,7 +112,7 @@ namespace FhirStarter.R4.Twisted.Core.Services
         public OperationDefinition GetOperationDefinition(HttpRequest request)
         {
             var current = HtmlHelper.GetDisplayUrlFromRequest(request);
-             var defintion = new OperationDefinition
+             var definition = new OperationDefinition
             {
                 Url = UrlHandler.GetUrlForOperationDefinition(current, string.Empty, nameof(Patient)),
                 Name = GetServiceResourceReference(),
@@ -171,7 +171,7 @@ namespace FhirStarter.R4.Twisted.Core.Services
                         }
                     }
             };
-            return defintion;
+            return definition;
         }
 
         public ICollection<string> GetStructureDefinitionNames()
