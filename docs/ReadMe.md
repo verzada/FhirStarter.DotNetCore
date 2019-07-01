@@ -15,8 +15,8 @@ The FhirStarter intends on solving the matter of integrating several data source
 * You have Visual Studio 2017++
 * .Net Core 2.2.203
 * You know Web API 
-* You know how to map FHIR resources (check [R4]) through [Forge]
+* You know how to map FHIR resources (check [R4](https://www.hl7.org/fhir/)) through [Forge](https://fire.ly/products/forge/)
 
 ## Getting Started
 
-We've created a guide which helps you along the way to create a FHIR server. Take a look at [Getting started] to begin implemented FHIR.
+We've created a guide which helps you along the way to create a FHIR server. Take a look at [Getting started](FHIRService/Getting Started.md) to begin implemented FHIR.
