@@ -23,5 +23,5 @@ If you want to get quickly started with developing a FHIR Service, just copy the
 
 Alternatively, create a new Web project and include the [Detonator](https://www.nuget.org/packages/FhirStarter.R4.Detonator.Core/) and [Instigator](https://www.nuget.org/packages/FhirStarter.R4.Instigator.Core/) nuget libraries from [nuget.org](https://www.nuget.org/)
 
-Alternatively you can go to the [Creating a FHIR service](Creating a FHIR service.md)
+Alternatively you can go to the [Creating a FHIR service](CreatingAFHIRService.md)
 
