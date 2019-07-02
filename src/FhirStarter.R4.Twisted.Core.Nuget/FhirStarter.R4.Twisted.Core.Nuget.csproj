@@ -48,4 +48,10 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\StructureDefinitions\FhirStarterPatient.StructureDefinition.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

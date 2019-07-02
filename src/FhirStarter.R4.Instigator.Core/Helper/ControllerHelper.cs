@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
@@ -74,14 +75,14 @@ namespace FhirStarter.R4.Instigator.Core.Helper
             }
 
             capabilityStatement.Rest =
-                AddSupportedProfiles(capabilityStatement.Rest);
+                AddProfile(capabilityStatement.Rest, services);
 
             return capabilityStatement;
 
         }
 
-        private static List<CapabilityStatement.RestComponent> AddSupportedProfiles(
-            List<CapabilityStatement.RestComponent> restComponents)
+        private static List<CapabilityStatement.RestComponent> AddProfile(
+            List<CapabilityStatement.RestComponent> restComponents, IEnumerable<IFhirService> services)
         {
 
             if (restComponents.Any())
@@ -89,12 +90,35 @@ namespace FhirStarter.R4.Instigator.Core.Helper
                 var structureDefinitions = ValidationHelper.GetStructureDefinitions();
                 //TODO: Don't know what to do here..
 
+                var definitions = structureDefinitions as StructureDefinition[] ?? structureDefinitions.ToArray();
+                var fhirServices = services as IFhirService[] ?? services.ToArray();
                 foreach (var restComponent in restComponents)
                 {
                     var resources = restComponent.Resource;
                     foreach (var resource in resources)
                     {
+                        var hl7ModelType = resource.Type;
+                        if (hl7ModelType != null)
+                        {
+                            var type = hl7ModelType.Value.ToString();
+                            var resourceService =
+                                fhirServices.FirstOrDefault(p => p.GetServiceResourceReference() == type);
+                            if (resourceService != null)
+                            {
+                                var supportedProfiles = resourceService.GetStructureDefinitionNames();
 
+                                foreach (var supportedProfile in supportedProfiles)
+                                {
+                                    var structureDefinition =
+                                        definitions.FirstOrDefault(p => p.Name == supportedProfile);
+
+                                    if (structureDefinition != null)
+                                    {
+                                        resource.Profile = structureDefinition.Url;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 

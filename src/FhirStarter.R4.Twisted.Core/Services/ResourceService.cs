@@ -82,12 +82,12 @@ namespace FhirStarter.R4.Twisted.Core.Services
 
         public OperationDefinition GetOperationDefinition(HttpRequest request)
         {
-            throw new NotImplementedException();
+           return new OperationDefinition();
         }
 
         public ICollection<string> GetStructureDefinitionNames()
         {
-            throw new NotImplementedException();
+            return new List<string>();
         }
     }
 }

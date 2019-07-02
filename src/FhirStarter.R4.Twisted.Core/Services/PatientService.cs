@@ -176,7 +176,7 @@ namespace FhirStarter.R4.Twisted.Core.Services
 
         public ICollection<string> GetStructureDefinitionNames()
         {
-            return new List<string> { GetServiceResourceReference() };
+            return new List<string> { "FhirStarterPatient" };
         }
 
         private static Patient MockPatient()
