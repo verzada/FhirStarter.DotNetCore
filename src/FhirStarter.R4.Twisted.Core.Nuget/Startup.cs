@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using FhirStarter.R4.Detonator.Core.Formatters;
 using FhirStarter.R4.Detonator.Core.Interface;
 using FhirStarter.R4.Instigator.Core.Configuration;

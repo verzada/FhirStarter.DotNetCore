@@ -85,9 +85,9 @@ namespace FhirStarter.R4.Twisted.Core.Services
            return new OperationDefinition();
         }
 
-        public ICollection<string> GetStructureDefinitionNames()
+        public string GetStructureDefinitionNameForResourceProfile()
         {
-            return new List<string>();
+            return string.Empty;
         }
     }
 }

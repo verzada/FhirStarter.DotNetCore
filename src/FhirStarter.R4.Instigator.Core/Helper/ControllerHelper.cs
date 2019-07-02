@@ -105,17 +105,14 @@ namespace FhirStarter.R4.Instigator.Core.Helper
                                 fhirServices.FirstOrDefault(p => p.GetServiceResourceReference() == type);
                             if (resourceService != null)
                             {
-                                var supportedProfiles = resourceService.GetStructureDefinitionNames();
+                                var profile = resourceService.GetStructureDefinitionNameForResourceProfile();
 
-                                foreach (var supportedProfile in supportedProfiles)
+                                var structureDefinition =
+                                    definitions.FirstOrDefault(p => p.Name == profile);
+
+                                if (structureDefinition != null)
                                 {
-                                    var structureDefinition =
-                                        definitions.FirstOrDefault(p => p.Name == supportedProfile);
-
-                                    if (structureDefinition != null)
-                                    {
-                                        resource.Profile = structureDefinition.Url;
-                                    }
+                                    resource.Profile = structureDefinition.Url;
                                 }
                             }
                         }
@@ -123,8 +120,8 @@ namespace FhirStarter.R4.Instigator.Core.Helper
                 }
 
             }
+
             return restComponents;
-            
         }
 
         private static string MetaDataName(IEnumerable<IFhirService> services)

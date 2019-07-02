@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <AssemblyName>FhirStarter.R4.Twisted.Core</AssemblyName>
+    <RootNamespace>FhirStarter.R4.Twisted.Core</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

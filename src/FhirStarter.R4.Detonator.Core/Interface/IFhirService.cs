@@ -12,7 +12,8 @@ namespace FhirStarter.R4.Detonator.Core.Interface
     {
         CapabilityStatement.RestComponent GetRestDefinition();
         OperationDefinition GetOperationDefinition(HttpRequest request);
-        ICollection<string> GetStructureDefinitionNames();
+        string GetStructureDefinitionNameForResourceProfile();
+
 
     }
 }
