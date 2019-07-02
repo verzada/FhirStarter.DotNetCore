@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using FhirStarter.R4.Instigator.Core.Validation;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Microsoft.AspNetCore.Mvc;
@@ -30,25 +31,22 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
             return SendResponse(structureDefinition);
         }
 
-        private StructureDefinition Load(bool excactMatch, string id, string nspace = null)
+        private static StructureDefinition Load(bool excactMatch, string id, string nspace = null)
         {
-            //string lookup;
-            //if (string.IsNullOrEmpty(nspace))
-            //{
-            //    lookup = id;
-            //}
-            //else
-            //{
-            //    lookup = nspace + "/" + id;
-            //}
+            string lookup;
+            if (string.IsNullOrEmpty(nspace))
+            {
+                lookup = id;
+            }
+            else
+            {
+                lookup = nspace + "/" + id;
+            }
 
-            //var structureDefinitions = _abstractStructureDefinitionService.GetStructureDefinitions();
-            //return excactMatch
-            //    ? structureDefinitions.FirstOrDefault(definition => definition.Type.Equals(lookup))
-            //    : structureDefinitions.FirstOrDefault(definition => definition.Url.EndsWith(lookup));
-
-            throw new NotImplementedException();
-
+            var structureDefinitions = ValidationHelper.GetStructureDefinitions();
+            return excactMatch
+                ? structureDefinitions.FirstOrDefault(definition => definition.Type.Equals(lookup))
+                : structureDefinitions.FirstOrDefault(definition => definition.Url.EndsWith(lookup));
         }
     }
 }

@@ -1,18 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
-using FhirStarter.R4.Detonator.Core.Interface;
 using FhirStarter.R4.Instigator.Core.Validation;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
-using Hl7.Fhir.Specification.Source;
-using Hl7.Fhir.Validation;
 using Microsoft.Extensions.Logging;
 using No.Helsenord.Common.Converter.Utils;
 using NUnit.Framework;
-using List = Hl7.Fhir.Model.List;
 
 namespace FhirStarter.R4.Instigator.Core.UnitTests.Validation
 {
@@ -26,7 +19,7 @@ namespace FhirStarter.R4.Instigator.Core.UnitTests.Validation
         public void Setup()
         {
             
-            _profileValidator = new ProfileValidator(ValidatorFactory.GetValidator(), GetLogger());
+            _profileValidator = new ProfileValidator(ValidationHelper.GetValidator(), GetLogger());
         }
 
         private static ILogger GetLogger()
@@ -46,13 +39,24 @@ namespace FhirStarter.R4.Instigator.Core.UnitTests.Validation
             Assert.IsTrue(validated.Issue.Count == 0);
         }
 
-        [TestCase("12345123451")]
-        public void TestValidateStandardPatientShouldFail(string id)
+        [TestCase("12345123451", 
+            "http://helse-nord.no/FHIR/profiles/Identification.Patient/Patient", false)]
+        [TestCase("12345123451", 
+            "https://github.com/verzada/FhirStarter.DotNetCore/fhir/StructureDefinition/FhirStarterPatient", true)]
+
+        public void TestValidatePatientWithProfile(string id, string profile, bool expectedValid)
         {
-            var patient = GetSomePatientWithProfile(id);
+            var patient = GetSomePatientWithProfile(id, profile);
             var validated = DoValidation(patient);
+            if (expectedValid)
+            {
+                Assert.IsTrue(validated.Issue.Count == 0);
+            }
+            else
+            {
+                Assert.IsTrue(validated.Issue.Count > 0);
+            }
             
-            Assert.IsTrue(validated.Issue.Count > 0);
         }
 
         [TestCase("1234512345", "22222222222", "33333333333")]
@@ -120,14 +124,14 @@ namespace FhirStarter.R4.Instigator.Core.UnitTests.Validation
             };
         }
 
-        private static Patient GetSomePatientWithProfile(string patientId)
+        private static Patient GetSomePatientWithProfile(string patientId, string profile)
         {
             var date = new FhirDateTime(new DateTimeOffset(DateTime.Now));
 
             return new Patient
             {
-                Meta = new Meta { LastUpdated = date.ToDateTimeOffset(new TimeSpan()), Profile = new List<string> { "http://helse-nord.no/FHIR/profiles/Identification.Patient/Patient" } },
-                Id = "12345678901",
+                Meta = new Meta { LastUpdated = date.ToDateTimeOffset(new TimeSpan()), Profile = new List<string> { profile } },
+                Id = patientId,
                 Active = true,
                 Name =
                     new List<HumanName>

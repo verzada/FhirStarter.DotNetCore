@@ -5,6 +5,7 @@ using System.Linq;
 using FhirStarter.R4.Detonator.Core.Interface;
 using FhirStarter.R4.Detonator.Core.SparkEngine.Service.FhirServiceExtensions;
 using FhirStarter.R4.Instigator.Core.Model;
+using FhirStarter.R4.Instigator.Core.Validation;
 using Hl7.Fhir.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -83,25 +84,23 @@ namespace FhirStarter.R4.Instigator.Core.Helper
             List<CapabilityStatement.RestComponent> restComponents)
         {
 
-            //if (restComponents.Any())
-            //{
-            //    var structureDefinitions = abstractStructureDefinitionService.GetStructureDefinitions();
-            //    //var profiles = structureDefinitions.Select(structureDefinition =>
-            //    //    new Canonical() {Url = new Uri(structureDefinition.Url)}).ToList();
+            if (restComponents.Any())
+            {
+                var structureDefinitions = ValidationHelper.GetStructureDefinitions();
+                //TODO: Don't know what to do here..
 
+                foreach (var restComponent in restComponents)
+                {
+                    var resources = restComponent.Resource;
+                    foreach (var resource in resources)
+                    {
 
-            //    foreach (var restComponent in restComponents)
-            //    {
-            //        var resources = restComponent.Resource;
-            //        foreach (var resource in resources)
-            //        {
-                        
-            //        }
-            //    }
+                    }
+                }
 
-            //}
-            //return restComponents;
-            throw new NotImplementedException();
+            }
+            return restComponents;
+            
         }
 
         private static string MetaDataName(IEnumerable<IFhirService> services)

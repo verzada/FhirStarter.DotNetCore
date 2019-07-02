@@ -105,7 +105,7 @@ namespace FhirStarter.R4.Instigator.Core.Configuration
 
         private static Validator GetValidator()
         {
-            return ValidatorFactory.GetValidator();
+            return ValidationHelper.GetValidator();
         }
 
         private static void BindIFhirServices(IServiceCollection services, List<TypeInitializer> serviceTypes, Type classType)
