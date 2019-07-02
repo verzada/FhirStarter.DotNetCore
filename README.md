@@ -5,6 +5,6 @@ Currently a POC, must not be seen as a complete and running project compared to 
 Take a look at the project board to see what's currently being built
 
 Currently lacking
-* validation
-* structure definitions
-* metadata handling
+* --validation--
+* --structure definitions--
+* metadata handling - currently working on it
