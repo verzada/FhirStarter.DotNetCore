@@ -21,6 +21,9 @@
     <None Update="Resources\StructureDefinitions\FhirStarterPatient.StructureDefinition.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\StructureDefinitions\FhirStarterPerson.StructureDefinition.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
