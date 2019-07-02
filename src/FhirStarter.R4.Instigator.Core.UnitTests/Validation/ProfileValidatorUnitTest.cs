@@ -26,10 +26,7 @@ namespace FhirStarter.R4.Instigator.Core.UnitTests.Validation
         {
             var factory = new LoggerFactory();
             return factory.CreateLogger("MyLogger");
-            
         }
-
-        
 
         [TestCase("12345123451")]
         public void TestValidateStandardPatient(string id)
@@ -78,7 +75,7 @@ namespace FhirStarter.R4.Instigator.Core.UnitTests.Validation
 
         [TestCase(1000, true, "12345123451")]
         [TestCase(1000, false, "12345123451")]
-        public void TestValidation(int tries, bool parallel, string patientId)
+        public void TestPatientValidation(int tries, bool parallel, string patientId)
         {
             var patient = GetSomePatient(patientId);
             var itemsToRun = new List<DelegateParameters>();
@@ -95,6 +92,30 @@ namespace FhirStarter.R4.Instigator.Core.UnitTests.Validation
             DelegateRunner.Run(itemsToRun, parallel);
         }
 
+        [Test]
+        public void TestValidateInvalidPerson()
+        {
+            var person = GetSomeInvalidPersonMissingGender();
+            var personXml = new FhirXmlSerializer().SerializeToDocument(person);
+            Console.WriteLine(personXml);
+            var validationResult = DoValidation(person);
+            Assert.IsTrue(validationResult.Issue.Count > 0);
+            var xml = new FhirXmlSerializer().SerializeToDocument(validationResult);
+            Console.WriteLine(xml);
+        }
+
+        [Test]
+        public void TestValidatePersonInvalidGender()
+        {
+            var person = GetPersonMissingBirthDate();
+            var personXml = new FhirXmlSerializer().SerializeToDocument(person);
+            Console.WriteLine(personXml);
+            var validationResult = DoValidation(person);
+            var xml = new FhirXmlSerializer().SerializeToDocument(validationResult);
+            Console.WriteLine(xml);
+            Assert.IsTrue(validationResult.Issue.Count > 0);
+            
+        }
         private OperationOutcome DoValidation(Resource arg)
         {
             return _profileValidator.Validate(arg);
@@ -145,8 +166,40 @@ namespace FhirStarter.R4.Instigator.Core.UnitTests.Validation
                     },
                 Gender = AdministrativeGender.Male,
                 BirthDate = "2000-01-01"
-
             };
+
+        }
+
+        private static Person GetSomeInvalidPersonMissingGender()
+        {
+            var person = new Person
+            {
+                Meta = new Meta
+                {
+                    Profile = new List<string>
+                    {
+                        "https://github.com/verzada/FhirStarter.DotNetCore/fhir/StructureDefinition/FhirStarterPerson"
+                    }
+                }
+            };
+            return person;
+        }
+
+        private static Person GetPersonMissingBirthDate()
+        {
+            var person = new Person
+            {
+                Meta = new Meta
+                {
+                    Profile = new List<string>
+                    {
+                        "https://github.com/verzada/FhirStarter.DotNetCore/fhir/StructureDefinition/FhirStarterPerson"
+                    }
+                },
+                Gender = AdministrativeGender.Male
+                
+            };
+            return person;
         }
     }
 }
