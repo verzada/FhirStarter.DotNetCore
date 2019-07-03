@@ -1,4 +1,4 @@
-# Getting started with validation in FhirStarter.DotNetCore
+# Step 5 - Getting started with validation in FhirStarter.DotNetCore
 
 In this section we'll describe how to get the validation running with a [StructureDefintion](http://www.hl7.org/fhir/structuredefinition.html).
 FhirStarter assumes that the StructureDefinition is per [Resource](http://www.hl7.org/fhir/resource.html) type and therefore the name of each StructureDefinition must be unique in the Service inheriting IFhirService.

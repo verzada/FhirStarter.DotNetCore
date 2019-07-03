@@ -1,4 +1,4 @@
-# Setting up Startup.cs
+# Step 4 Setting up the Startup.cs file
 
 For the FhirStarter to work with all of the necessary dependencies, Startup.cs has to be configured.
 

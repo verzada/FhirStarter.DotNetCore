@@ -1,4 +1,6 @@
-# Some quick pointers in order to successfully create a FHIR Resource service
+# Step 2 Setting up a Resource Service
+
+## Some quick pointers in order to successfully create a FHIR Resource service
 
 FhirStarter is built around the [.NET API for HL7 FHIR](https://github.com/FirelyTeam/fhir-net-api) and its conventions. 
 A [Resource](https://www.hl7.org/fhir/resource.html) service in FhirStarter is based on classes that inherits the [Base](https://github.com/FirelyTeam/fhir-net-api/blob/develop-stu3/src/Hl7.Fhir.Core/Model/Base.cs) model.
@@ -16,7 +18,7 @@ There are three possible outcomes from a FHIR Service:
 
 You'll need to handle and test for these three scenarios.
 
-## Setting up a Resource service
+## The steps in setting up a Resource service 
 
 ### The IFhirService
 

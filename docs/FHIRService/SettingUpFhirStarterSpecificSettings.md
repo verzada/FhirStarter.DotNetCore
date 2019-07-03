@@ -1,4 +1,4 @@
-# Step 1 FHIR specific settings
+# Step 3 Setting up FhirStarter specific settings
 
 Whether you chose to create a service from scratch with the nuget libraries or copied the nuget project from GitHub, the process is pretty much the same.
 
