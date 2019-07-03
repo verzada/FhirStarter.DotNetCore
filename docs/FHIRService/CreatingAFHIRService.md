@@ -19,5 +19,5 @@ That's it.
 
 ## If you want validation
 
-You'll need profiles to validate from to make it properly work. However you can use the standard profile to initally test and see if the validation works.
+You'll need profiles defined as [StructureDefintions](http://www.hl7.org/fhir/structuredefinition.html)  to validate from to make it properly work. However you can use the standard profile to initally test and see if the validation works.
 Go to [Getting started with Validation](../Validation/GettingStartedWithValidation.md) to learn more.

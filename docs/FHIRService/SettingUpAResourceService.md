@@ -1,18 +1,18 @@
 # Some quick pointers in order to successfully create a FHIR Resource service
 
-FhirStarter is built around the [.NET API for HL7 FHIR](https://github.com/FirelyTeam/fhir-net-api) and it's conventions. 
+FhirStarter is built around the [.NET API for HL7 FHIR](https://github.com/FirelyTeam/fhir-net-api) and its conventions. 
 A [Resource](https://www.hl7.org/fhir/resource.html) service in FhirStarter is based on classes that inherits the [Base](https://github.com/FirelyTeam/fhir-net-api/blob/develop-stu3/src/Hl7.Fhir.Core/Model/Base.cs) model.
 
 Many endpoints (Create, Read, Update, etc .. ) looks into the [SearchParam](https://github.com/FirelyTeam/fhir-net-api/blob/develop-stu3/src/Hl7.Fhir.Core/Rest/SearchParams.cs) object to figure out what is being queried for.
 The SearchParams object will only accept valid property names in the request url.
 
-
 There are three possible outcomes from a FHIR Service:
-- A Resource which is either a Resource or a [Bundle](https://www.hl7.org/fhir/bundle.html)
-- A validation report if validation is enabled and the input or output doesn't match the profile.
+- A xml or json result which is either a Resource or a [Bundle](https://www.hl7.org/fhir/bundle.html)
+- An [OperationOutcome](https://www.hl7.org/fhir/operationoutcome.html) if an exception occurs.
+- A validation report in form of a OperationOutcome if validation is enabled and the input or output doesn't match the profile.
   - Input is typically create, patch or update
   - Output is the response returned to the client from the server
-- An [OperationOutcome](https://www.hl7.org/fhir/operationoutcome.html) if an exception occurs.
+
 
 You'll need to handle and test for these three scenarios.
 
@@ -20,7 +20,7 @@ You'll need to handle and test for these three scenarios.
 
 ### The IFhirService
 
-To create a new Resource service, just create a new file in your web application. Initially it can typically look something like this:
+To create a new Resource service with the IFhirService interface, just create a new file in your web application. Initially it can typically look something like this:
 
 ```c#
 using System;
@@ -81,7 +81,7 @@ namespace PatientAdministration.Person.R4.Services
             throw new NotImplementedException();
         }
 
-        public ICollection<string> GetStructureDefinitionNames()
+        public string GetStructureDefinitionNameForResourceProfile()
         {
             throw new NotImplementedException();
         }
@@ -266,14 +266,11 @@ Here you have only one parameter and that's the identifier of your FHIR resource
 Unlike Update, Patch will let you update part of a resource instead of the whole resource. F.ex if you want to update a field in a resource or your datasource.
 
 ##### Key - todo check this part out 
-The key is handled by the ServiceHandler
+-- TODO
+
 
 #### StructureDefinition
 
-##### GetStructureDefinitionNames
+##### GetStructureDefinitionNameForResourceProfile
 
-You can add your custom StructureDefinition(s) to the service, by first adding the names of the StructureDefinitions (see the ExamplePatientService for a quick howto).
-
-Additionally you need to implement IFhirStructureDefinitionService so the FhirController can retrieve the source of the StructureDefinition. You can choose where to get the definition from, but you have to return the result as an ICollection.
-
-The StructureDefinitions are available through the url .../fhir/StructureDefinition/
+You can add your custom StructureDefinition to the service, by adding the name of the StructureDefinition (see the [Getting started with Validation](../Validation/GettingStartedWithValidation.md) for a quick howto).

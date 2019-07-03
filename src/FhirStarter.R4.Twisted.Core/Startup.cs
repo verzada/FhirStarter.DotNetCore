@@ -38,14 +38,14 @@ namespace FhirStarter.R4.Twisted.Core
         // Copy this method
         private void FhirSetup(IServiceCollection services)
         {
-            var fhirStarterSettings =
+            var appSettings =
                 StartupConfigHelper.BuildConfigurationFromJson(AppContext.BaseDirectory, "appsettings.json");
-            FhirStarterConfig.SetupFhir(services, fhirStarterSettings, CompatibilityVersion.Version_2_2);
+            FhirStarterConfig.SetupFhir(services, appSettings, CompatibilityVersion.Version_2_2);
 
             var detonator = FhirStarterConfig.GetDetonatorAssembly();
             var instigator = FhirStarterConfig.GetInstigatorAssembly();
 
-            services.Configure<FhirStarterSettings>(fhirStarterSettings.GetSection(nameof(FhirStarterSettings)));
+            services.Configure<FhirStarterSettings>(appSettings.GetSection(nameof(FhirStarterSettings)));
             services.AddMvc(options =>
                 {
                     options.OutputFormatters.Clear();
@@ -61,7 +61,6 @@ namespace FhirStarter.R4.Twisted.Core
                 })
                 .AddApplicationPart(instigator).AddApplicationPart(detonator).AddControllersAsServices()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
         }
 
 
