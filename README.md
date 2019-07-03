@@ -1,10 +1,4 @@
 # FhirStarter.DotNetCore
-A .Net Core version of FhirStarter - which hopefully can be adjusted to fit with any FHIR versjon
+A .Net Core version of FhirStarter for FHIR version R4 
 
-Currently a POC, must not be seen as a complete and running project compared to the STU3 project. 
-Take a look at the project board to see what's currently being built
-
-Currently lacking in source code
-* ~~validation~~
-* ~~structure definitions~~
-* metadata handling - currently working on it
+Take a look at the [ReadMe](docs\ReadMe.md) file for more information about setting up a R4 service with FhirStarter.DotNet 

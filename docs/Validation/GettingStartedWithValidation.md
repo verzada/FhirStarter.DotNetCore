@@ -74,3 +74,8 @@ For the StructureDefinition to be picked up by the FhirStarter controller, the d
 
 The resources available in the folder structure must be set to **Copy if newer** in the *Copy to Output Directory* option for each Structure Definition file.  
 
+## Running multiple instances in IIS with validation
+
+In .Net Framework STU3 version of FhirStarter there is a problem with running concurrent validation due to the different IIS instances are trying to access the same files for validation.
+
+In the .Net Core R4 version of FhirStarter, we try to avoid the problem by having the StructureDefinitions separate in each instance.
