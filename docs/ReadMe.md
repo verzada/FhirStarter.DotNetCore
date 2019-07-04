@@ -27,4 +27,6 @@ The guide is not entirely complete, but it should help you along to create a sim
 - Step 4 [Setting up the Startup.cs file](FHIRService/SettingUpStartup.md) helps you configure the startup.cs file as well as adding a crucial setting in Program.cs for activating log4net logging
 - Step 5 [Setting up Validation for your services](Validation/GettingStartedWithValidation.md) gets your validation going when all the previous steps are done. 
 
+## Troubleshooting
 
+For known issues check the [Troubleshooting](TroubleShooting) folder
