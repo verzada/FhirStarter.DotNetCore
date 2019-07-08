@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using FhirStarter.R4.Detonator.Core.Interface;
 using FhirStarter.R4.Detonator.Core.SparkEngine.Core;
 using FhirStarter.R4.Detonator.Core.SparkEngine.Extensions;
@@ -36,12 +37,7 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
                 var validation = _profileValidator.Validate((Resource) result);
                 if (!validation.Success)
                 {
-                    //validation.Issue.Add(new OperationOutcome.IssueComponent
-                    //{
-                    //    //Diagnostics = new FhirJsonSerializer().SerializeToDocument(result).ToString(),
-                        
-                    //});
-                    //result = validation;
+                 
                     validation.Text = new Narrative
                     {
                         Div = new FhirXmlSerializer().SerializeToDocument(result).ToString()
@@ -49,6 +45,9 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
                     result = validation;
                 }
             }
+
+            //Setting default contenttype to text/xml
+            Response.ContentType = !string.IsNullOrEmpty(Request.ContentType) ? Request.ContentType : "text/xml";
             if (result is OperationOutcome)
             {
                 return BadRequest(result);

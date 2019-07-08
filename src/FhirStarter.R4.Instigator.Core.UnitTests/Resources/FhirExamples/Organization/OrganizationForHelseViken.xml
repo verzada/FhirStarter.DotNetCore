@@ -1,0 +1,44 @@
+﻿<Organization xmlns="http://hl7.org/fhir" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <meta>
+    <profile value="http://hl7.no/fhir/StructureDefinition/no-basis-Organization"/>
+  </meta>
+  <identifier>
+    <!-- Organization number from the norwegian RESH -->
+    <system value="urn:oid:2.16.578.1.12.4.1.2.102"/>
+    <value value="101719"/>
+  </identifier>
+  <identifier>
+     Organization number from the norwegian enhetsregisteret 
+      
+    <system value="urn:oid:2.16.578.1.12.4.1.2.101"/>
+    <value value="915933149"/>
+  </identifier>
+
+
+  <name value="VESTRE VIKEN HF"/>
+  <alias value="VVHF"/>
+  <alias value="Vestre Viken HF"/>
+  <address>
+    <extension url="http://hl7.no/fhir/StructureDefinition/no-basis-propertyinformation">
+      <extension url="Kommune">
+        <valueCoding>
+          <system value="urn:oid:2.16.578.1.12.4.1.1.3402"/>
+          <code value="602"/>
+          <display value="Oslo"/>
+        </valueCoding>
+      </extension>
+    </extension>
+
+    <extension url="http://hl7.no/fhir/StructureDefinition/no-basis-address-official">
+      <valueBoolean value="true"/>
+    </extension>
+
+    <type value="physical"/>
+    <line value="Wergelands gate 10"/>
+    <city value="DRAMMEN"/>
+    <district value="Drammen"/>
+    <postalCode value="3019"/>
+
+
+  </address>
+</Organization>

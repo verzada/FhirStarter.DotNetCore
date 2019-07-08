@@ -7,6 +7,7 @@ namespace FhirStarter.R4.Instigator.Core.Helper
     {
         public static IConfigurationRoot BuildConfigurationFromJson(string basePath, string settingsFilename)
         {
+
             if (!string.IsNullOrEmpty(basePath) && !string.IsNullOrEmpty(settingsFilename))
             {
                 var configuration = new ConfigurationBuilder()

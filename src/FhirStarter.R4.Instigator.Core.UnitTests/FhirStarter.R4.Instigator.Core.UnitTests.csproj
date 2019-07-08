@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\FhirExamples\Organization\OrganizationForHelseViken.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\FhirExamples\Organization\OrganizationForHelseViken.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Converter.Standard" Version="1.0.4" />
     <PackageReference Include="Hl7.Fhir.Specification.R4" Version="1.2.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
@@ -23,6 +31,21 @@
     </None>
     <None Update="Resources\StructureDefinitions\FhirStarterPerson.StructureDefinition.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\StructureDefinitions\No-Basis-Definitions\no-basis-address-official.structuredefinition-extension.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\StructureDefinitions\No-Basis-Definitions\no-basis-Address.structuredefinition-profile.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\StructureDefinitions\No-Basis-Definitions\no-basis-Organization.structuredefinition-profile.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\StructureDefinitions\No-Basis-Definitions\no-basis-propertyinformation.structuredefinition-extension.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\StructureDefinitions\No-Basis-Definitions\no-basis-urban-district.structuredefinition-extension.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
