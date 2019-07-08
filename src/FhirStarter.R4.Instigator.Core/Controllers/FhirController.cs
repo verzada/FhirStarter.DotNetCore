@@ -105,7 +105,7 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
             return HandleServiceRead(type, id);
         }
 
-        [HttpGet, Route("fhir/{type}"), FormatFilter]
+        [HttpGet, Route("fhir/{type}"), Route("{type}")]
         public ActionResult Read(string type)
         {
             return HandleServiceReadWithSearchParams(type);
