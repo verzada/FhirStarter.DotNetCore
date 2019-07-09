@@ -50,11 +50,9 @@ namespace FhirStarter.R4.Instigator.Core.Configuration
             var dependencies = DependencyContext.Default.RuntimeLibraries;
             foreach (var library in dependencies)
             {
-                if (library.Name.ToLower().Equals(assemblyName.ToLower()))
-                {
-                    var assembly = Assembly.Load(new AssemblyName(library.Name));
-                    return assembly;
-                }
+                if (!library.Name.ToLower().Equals(assemblyName.ToLower())) continue;
+                var assembly = Assembly.Load(new AssemblyName(library.Name));
+                return assembly;
             }
             throw new ArgumentException($"Could not find {assemblyName} in DependencyContext. Is the assembly added to the main project?");
             
@@ -111,34 +109,15 @@ namespace FhirStarter.R4.Instigator.Core.Configuration
         private static void BindIFhirServices(IServiceCollection services, List<TypeInitializer> serviceTypes, Type classType)
         {
             var serviceType = FindType(serviceTypes, classType);
-            if (serviceType != null)
+            if (serviceType == null) return;
+            if (serviceType.Name.Equals(nameof(IFhirService)))
             {
-                if (serviceType.Name.Equals(nameof(IFhirService)))
-                {
-                    var instance = (IFhirService)Activator.CreateInstance(classType);
-                   services.Add(new ServiceDescriptor(typeof(IFhirService), instance));
-                    //app.Bind<IFhirService>().ToConstant(instance);
-                }
-                else if (serviceType.Name.Equals(nameof(IFhirMockupService)))
-                {
-                    var instance = (IFhirMockupService)Activator.CreateInstance(classType);
-                    services.Add(new ServiceDescriptor(typeof(IFhirMockupService), instance));
-                    //kernel.Bind<IFhirMockupService>().ToConstant(instance);
-                }
-                //else if (serviceType.Name.Equals(nameof(AbstractStructureDefinitionService)))
-                //{
-                //    var structureDefinitionService = (AbstractStructureDefinitionService)Activator.CreateInstance(classType);
-                //  //  kernel.Bind<AbstractStructureDefinitionService>().ToConstant(structureDefinitionService);
-                //    var validator = structureDefinitionService.GetValidator();
-                //    if (validator != null)
-                //    {
-                //        var profileValidator = new ProfileValidator(validator);
-                //        kernel.Bind<ProfileValidator>().ToConstant(profileValidator);
-                //    }
-                //    _amountOfIFhirStructureDefinitionsInitialized++;
-                //}
-                //var instance = (IProfileValidator)Activator.CreateInstance(typeof(ProfileValidator));
-                //services.Add(new ServiceDescriptor(typeof(IProfileValidator), GetProfileValidator()));
+                
+                services.Add(new ServiceDescriptor(typeof(IFhirService), classType, ServiceLifetime.Singleton));
+            }
+            else if (serviceType.Name.Equals(nameof(IFhirMockupService)))
+            {
+                services.Add(new ServiceDescriptor(typeof(IFhirMockupService), classType, ServiceLifetime.Singleton));
             }
         }
 

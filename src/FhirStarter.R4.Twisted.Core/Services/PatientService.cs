@@ -17,11 +17,11 @@ namespace FhirStarter.R4.Twisted.Core.Services
 {
     public class PatientService:IFhirService
     {
-        public PatientService()
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public PatientService(IHttpContextAccessor httpContextAccessor)
         {
-#pragma warning disable 219
-            int i = 0;
-#pragma warning restore 219
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public string GetServiceResourceReference()

@@ -61,6 +61,8 @@ namespace FhirStarter.R4.Twisted.Core
                 })
                 .AddApplicationPart(instigator).AddApplicationPart(detonator).AddControllersAsServices()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddHttpContextAccessor();
         }
 
 
