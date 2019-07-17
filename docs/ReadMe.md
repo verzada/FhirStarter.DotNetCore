@@ -29,4 +29,4 @@ The guide is not entirely complete, but it should help you along to create a sim
 
 ## Troubleshooting
 
-For known issues check the [Troubleshooting](TroubleShooting) folder
+For known issues check the [Troubleshooting](https://github.com/verzada/FhirStarter.DotNetCore/tree/master/docs/Troubleshooting) folder
