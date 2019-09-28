@@ -4,7 +4,6 @@ using FhirStarter.R4.Instigator.Core.Validation;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Microsoft.Extensions.Logging;
-using No.Helsenord.Common.Converter.Utils;
 using NUnit.Framework;
 
 namespace FhirStarter.R4.Instigator.Core.UnitTests.Validation
@@ -73,24 +72,24 @@ namespace FhirStarter.R4.Instigator.Core.UnitTests.Validation
             Console.WriteLine(xml);
         }
 
-        [TestCase(1000, true, "12345123451")]
-        [TestCase(1000, false, "12345123451")]
-        public void TestPatientValidation(int tries, bool parallel, string patientId)
-        {
-            var patient = GetSomePatient(patientId);
-            var itemsToRun = new List<DelegateParameters>();
-            for (var i = 0; i < tries; i++)
-            {
-                var parameters = new List<object> {patient};
-                Func<Resource, OperationOutcome> func = DoValidation;
-                itemsToRun.Add(new DelegateParameters
-                {
-                    Delegate = func,
-                    Parameters = parameters.ToArray()
-                });
-            }
-            DelegateRunner.Run(itemsToRun, parallel);
-        }
+        //[TestCase(1000, true, "12345123451")]
+        //[TestCase(1000, false, "12345123451")]
+        //public void TestPatientValidation(int tries, bool parallel, string patientId)
+        //{
+        //    var patient = GetSomePatient(patientId);
+        //    var itemsToRun = new List<DelegateParameters>();
+        //    for (var i = 0; i < tries; i++)
+        //    {
+        //        var parameters = new List<object> {patient};
+        //        Func<Resource, OperationOutcome> func = DoValidation;
+        //        itemsToRun.Add(new DelegateParameters
+        //        {
+        //            Delegate = func,
+        //            Parameters = parameters.ToArray()
+        //        });
+        //    }
+        //    DelegateRunner.Run(itemsToRun, parallel);
+        //}
 
         [Test]
         public void TestValidateInvalidPerson()

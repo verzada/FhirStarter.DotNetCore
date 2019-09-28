@@ -5,7 +5,6 @@ using FhirStarter.R4.Instigator.Core.Validation;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Microsoft.Extensions.Logging;
-using No.Helsenord.Common.Converter.Utils;
 using NUnit.Framework;
 
 namespace FhirStarter.R4.Instigator.Core.UnitTests.Validation
@@ -28,18 +27,18 @@ namespace FhirStarter.R4.Instigator.Core.UnitTests.Validation
             return factory.CreateLogger("MyLogger");
         }
 
-        [TestCase("OrganizationForHelseViken.xml")]
-        public void ValidateOrganization(string path)
-        {
-            using (var stream = AssemblyHelper.GetStream(path, Assembly.GetExecutingAssembly()))
-            {
-                var xDocument = XDocument.Load(stream);
-                var organization = new FhirXmlParser().Parse<Organization>(xDocument.ToString());
-                var valid = _profileValidator.Validate(organization);
-                var serialized = new FhirXmlSerializer().SerializeToDocument(valid);
-                Console.WriteLine(serialized);
-                Assert.IsTrue(valid.Issue.Count == 0);
-            }
-        }
+        //[TestCase("OrganizationForHelseViken.xml")]
+        //public void ValidateOrganization(string path)
+        //{
+        //    using (var stream = AssemblyHelper.GetStream(path, Assembly.GetExecutingAssembly()))
+        //    {
+        //        var xDocument = XDocument.Load(stream);
+        //        var organization = new FhirXmlParser().Parse<Organization>(xDocument.ToString());
+        //        var valid = _profileValidator.Validate(organization);
+        //        var serialized = new FhirXmlSerializer().SerializeToDocument(valid);
+        //        Console.WriteLine(serialized);
+        //        Assert.IsTrue(valid.Issue.Count == 0);
+        //    }
+        //}
     }
 }
