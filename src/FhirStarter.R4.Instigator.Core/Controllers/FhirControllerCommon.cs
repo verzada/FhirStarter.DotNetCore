@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using FhirStarter.R4.Detonator.Core.MediaTypeHeaders;
 using FhirStarter.R4.Detonator.Core.SparkEngine.Core;
 using FhirStarter.R4.Instigator.Core.Validation.Exceptions;
 using Hl7.Fhir.Model;
@@ -27,13 +28,13 @@ namespace FhirStarter.R4.Instigator.Core.Controllers
             {
                 var xmlSerializer = new FhirXmlSerializer();
                 httpContent =
-                    GetHttpContent(xmlSerializer.SerializeToString(resource), FhirMediaType.XmlResource);
+                    GetHttpContent(xmlSerializer.SerializeToString(resource), FhirMediaTypeHeaderValues.ApplicationXmlFhir.ToString());
             }
             else
             {
                 var jsonSerializer = new FhirJsonSerializer();
                 httpContent =
-                    GetHttpContent(jsonSerializer.SerializeToString(resource), FhirMediaType.JsonResource);
+                    GetHttpContent(jsonSerializer.SerializeToString(resource), FhirMediaTypeHeaderValues.ApplicationJsonFhir.ToString());
             }
 
             var response = new HttpResponseMessage(HttpStatusCode.OK) {Content = httpContent};

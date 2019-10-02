@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -35,36 +36,47 @@ namespace FhirStarter.R4.Twisted.Core
             FhirSetup(services);
         }
 
+        public void FhirDotNetCore3Setup(IServiceCollection services)
+        {
+            var appSettings =
+                StartupConfigHelper.BuildConfigurationFromJson(AppContext.BaseDirectory, "appSettings.json");
+            FhirStarterConfig.SetupFhir(services, appSettings, CompatibilityVersion.Latest);
+
+        }
+
         // Copy this method
         private void FhirSetup(IServiceCollection services)
         {
-            var fhirStarterSettings =
+            var appSettings =
                 StartupConfigHelper.BuildConfigurationFromJson(AppContext.BaseDirectory, "appsettings.json");
-            FhirStarterConfig.SetupFhir(services, fhirStarterSettings, CompatibilityVersion.Version_2_2);
+            FhirStarterConfig.SetupFhir(services, appSettings, CompatibilityVersion.Version_3_0);
 
             var detonator = FhirStarterConfig.GetDetonatorAssembly();
             var instigator = FhirStarterConfig.GetInstigatorAssembly();
 
-            services.Configure<FhirStarterSettings>(fhirStarterSettings.GetSection(nameof(FhirStarterSettings)));
+            services.Configure<FhirStarterSettings>(appSettings.GetSection(nameof(FhirStarterSettings)));
             services.AddMvc(options =>
-                {
-                    options.OutputFormatters.Clear();
-                    options.RespectBrowserAcceptHeader = true;
-                    options.OutputFormatters.Add(new XmlFhirSerializerOutputFormatter());
-                    options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
-                    options.OutputFormatters.Add(new JsonFhirFormatter());
-                })
-                .AddJsonOptions(options =>
+            {
+                options.OutputFormatters.Clear();
+                options.RespectBrowserAcceptHeader = true;
+                options.OutputFormatters.Add(new XmlFhirSerializerOutputFormatter());
+                options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+                options.OutputFormatters.Add(new JsonFhirFormatter());
+                options.EnableEndpointRouting = false;
+            })
+                .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Formatting = Formatting.Indented;
                 })
                 .AddApplicationPart(instigator).AddApplicationPart(detonator).AddControllersAsServices()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            services.AddHttpContextAccessor();
         }
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILogger<IFhirService> logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<IFhirService> logger)
         {
             if (env.IsDevelopment())
             {

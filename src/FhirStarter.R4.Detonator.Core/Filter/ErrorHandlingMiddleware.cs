@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.Http;
 using Hl7.Fhir.Model;
 
 namespace FhirStarter.R4.Detonator.Core.Filter
@@ -33,26 +32,27 @@ namespace FhirStarter.R4.Detonator.Core.Filter
         private static OperationOutcome.IssueComponent CheckForHttpResponseException(Exception exception, bool ShowStackTrace)
         {
             OperationOutcome.IssueComponent responseIssue = null;
-            if (exception.GetType().ToString().Contains(nameof(HttpResponseException)))
-            {
-                var responseException = (HttpResponseException)exception;
+            //todo
+            //if (exception.GetType().ToString().Contains(nameof(iactionre)))
+            //{
+            //    var responseException = (HttpResponseException)exception;
 
-                if (responseException.Response != null)
-                {
-                    responseIssue = new OperationOutcome.IssueComponent
-                    {
-                        Severity = OperationOutcome.IssueSeverity.Fatal,
-                        Code = OperationOutcome.IssueType.Exception,
-                        Details =
-                            new CodeableConcept("Response", exception.GetType().ToString(),
-                                responseException.Response.ReasonPhrase)
-                    };
-                    if (ShowStackTrace)
-                    {
-                        responseIssue.Diagnostics = exception.StackTrace;
-                    }
-                }
-            }
+            //    if (responseException.Response != null)
+            //    {
+            //        responseIssue = new OperationOutcome.IssueComponent
+            //        {
+            //            Severity = OperationOutcome.IssueSeverity.Fatal,
+            //            Code = OperationOutcome.IssueType.Exception,
+            //            Details =
+            //                new CodeableConcept("Response", exception.GetType().ToString(),
+            //                    responseException.Response.ReasonPhrase)
+            //        };
+            //        if (ShowStackTrace)
+            //        {
+            //            responseIssue.Diagnostics = exception.StackTrace;
+            //        }
+            //    }
+            //}
             return responseIssue;
         }
     }

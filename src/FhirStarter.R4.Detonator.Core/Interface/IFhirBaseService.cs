@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using FhirStarter.R4.Detonator.Core.SparkEngine.Core;
+﻿using FhirStarter.R4.Detonator.Core.SparkEngine.Core;
 using Hl7.Fhir.Model;
 using Hl7.Fhir.Rest;
 using Microsoft.AspNetCore.Mvc;

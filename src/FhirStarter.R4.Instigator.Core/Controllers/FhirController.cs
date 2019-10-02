@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Http;
 using FhirStarter.R4.Detonator.Core.Interface;
 using FhirStarter.R4.Detonator.Core.SparkEngine.Core;
 using FhirStarter.R4.Detonator.Core.SparkEngine.Extensions;

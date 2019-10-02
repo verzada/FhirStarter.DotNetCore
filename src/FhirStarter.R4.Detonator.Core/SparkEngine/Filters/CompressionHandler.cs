@@ -67,7 +67,7 @@ namespace FhirStarter.R4.Detonator.Core.SparkEngine.Filters
             if (request.Content != null && request.Content.Headers.ContentEncoding.Count > 0)
             {
                 var encoding = request.Content.Headers.ContentEncoding.First();
-                if (!_decompressors.TryGetValue(encoding, out var decompressor))
+                if (!_decompressors.TryGetValue(encoding, out var decompressed))
                 {
                     var outcome = new OperationOutcome
                     {
@@ -82,11 +82,12 @@ namespace FhirStarter.R4.Detonator.Core.SparkEngine.Filters
                             }
                         }
                     };
-                    throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, outcome));
+                 //todo
+                    //   throw new HttpResponseException(request.CreateResponse(HttpStatusCode.BadRequest, outcome));
                 }
                 try
                 {
-                    request.Content = decompressor(request.Content);
+                    request.Content = decompressed(request.Content);
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
@@ -102,7 +103,8 @@ namespace FhirStarter.R4.Detonator.Core.SparkEngine.Filters
                             }
                         }
                     };
-                    throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, outcome));
+                    //todo
+                    //throw new HttpResponseException(request.CreateResponse(HttpStatusCode.Forbidden, outcome));
                 }
             }
 

@@ -15,7 +15,7 @@ namespace FhirStarter.R4.Twisted.Core
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureLogging((hostingContext, logging) => { logging.AddLog4Net("log4net.config"); })
                 // the .useUrls only applies when using dotnet run
-                .UseUrls($"http://{hostname}:5052")
+                //.UseUrls($"http://{hostname}:5052")
                 .UseStartup<Startup>()
                 .Build();
             webHost.Run();

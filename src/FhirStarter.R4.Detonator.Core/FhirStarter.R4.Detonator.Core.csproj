@@ -29,13 +29,43 @@ Icons made by https://www.flaticon.com/authors/roundicons"</Description>
     <PackageLicenseExpressionVersion>1.0.0</PackageLicenseExpressionVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="SparkEngine\ExceptionHandling\**" />
-    <EmbeddedResource Remove="SparkEngine\ExceptionHandling\**" />
-    <None Remove="SparkEngine\ExceptionHandling\**" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="SparkEngine\ExceptionHandling\**" />
+    <Compile Remove="SparkEngine\Filters\**" />
+    <Compile Remove="SparkEngine\Formatters\**" />
+    <Compile Remove="SparkEngine\Handlers\**" />
+    <Compile Remove="SparkEngine\Infrastructure\**" />
+    <Compile Remove="SparkEngine\Search\**" />
+    <EmbeddedResource Remove="SparkEngine\ExceptionHandling\**" />
+    <EmbeddedResource Remove="SparkEngine\Filters\**" />
+    <EmbeddedResource Remove="SparkEngine\Formatters\**" />
+    <EmbeddedResource Remove="SparkEngine\Handlers\**" />
+    <EmbeddedResource Remove="SparkEngine\Infrastructure\**" />
+    <EmbeddedResource Remove="SparkEngine\Search\**" />
+    <None Remove="SparkEngine\ExceptionHandling\**" />
+    <None Remove="SparkEngine\Filters\**" />
+    <None Remove="SparkEngine\Formatters\**" />
+    <None Remove="SparkEngine\Handlers\**" />
+    <None Remove="SparkEngine\Infrastructure\**" />
+    <None Remove="SparkEngine\Search\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Formatters\FhirMediaTypeFormatter.cs" />
+    <Compile Remove="Formatters\JsonFhirFormatter.cs" />
+    <Compile Remove="Formatters\XmlFhirSerializerOutputFormatter.cs" />
+    <Compile Remove="SparkEngine\Auxiliary\LimitedStream.cs" />
+    <Compile Remove="SparkEngine\Auxiliary\XmlSignatureHelper.cs" />
+    <Compile Remove="SparkEngine\Core\Const.cs" />
+    <Compile Remove="SparkEngine\Core\Error.cs" />
+    <Compile Remove="SparkEngine\Core\FhirMediaTypes.cs" />
+    <Compile Remove="SparkEngine\Core\FhirReponse.cs" />
+    <Compile Remove="SparkEngine\Core\Interaction.cs" />
+    <Compile Remove="SparkEngine\Core\SparkException.cs" />
     <Compile Remove="SparkEngine\Extensions\HttpConfigurationFhirExtensions.cs" />
-    <Compile Remove="SparkEngine\Filters\FhirResponseHandler.cs" />
+    <Compile Remove="SparkEngine\Extensions\HttpRequestFhirExtensions.cs" />
+    <Compile Remove="SparkEngine\Extensions\OperationOutcomeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="SparkEngine\renderxmlashtml.xslt" />
@@ -49,9 +79,7 @@ Icons made by https://www.flaticon.com/authors/roundicons"</Description>
       <ExcludeAssets>ContentFiles</ExcludeAssets>
     </PackageReference>
     <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Extensions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.WebApiCompatShim" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="4.6.0" />
   </ItemGroup>
@@ -59,5 +87,8 @@ Icons made by https://www.flaticon.com/authors/roundicons"</Description>
     <None Update="C:\Users\hha046\.nuget\packages\hl7.fhir.specification.r4\0.96.1\contentFiles\any\any\specification.zip">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SparkEngine\Auxiliary\" />
   </ItemGroup>
 </Project>
