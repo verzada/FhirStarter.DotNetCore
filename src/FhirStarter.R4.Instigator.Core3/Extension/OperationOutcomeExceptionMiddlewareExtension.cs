@@ -22,16 +22,17 @@ namespace FhirStarter.R4.Instigator.Core.Extension
                 {
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     context.Response.ContentType = "application/json";
-                    
-                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-                    if (contextFeature != null)
+                    var error = context.Features.Get<IExceptionHandlerFeature>();
+                    if (error != null)
                     {
-                        logger.LogError($"The request {context.Request.Path} failed: {contextFeature.Error}");
+                        logger.LogError($"The request {context.Request.Path} failed: {error.Error}");
+                        var exception = error.Error;
+                        var exceptionType = exception.GetType();
                         var issue = new OperationOutcome.IssueComponent
                         {
-                            Details = new CodeableConcept(nameof(HttpError), nameof(HttpError),
-                                contextFeature.Error.Message),
-                            Diagnostics = contextFeature.Error.StackTrace
+                            Details = new CodeableConcept(nameof(exceptionType), exceptionType.FullName,
+                              exception.Message),
+                            Diagnostics = exception.StackTrace
                         };
                         var outcome = new OperationOutcome();
                         outcome.Issue.Add(issue);

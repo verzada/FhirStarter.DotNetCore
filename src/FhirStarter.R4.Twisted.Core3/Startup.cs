@@ -17,7 +17,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace FhirStarter.R4.Twisted.Core
 {
@@ -33,19 +32,11 @@ namespace FhirStarter.R4.Twisted.Core
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            FhirSetup(services);
+            FhirDotnet3Setup(services);
         }
 
-        public void FhirDotNetCore3Setup(IServiceCollection services)
-        {
-            var appSettings =
-                StartupConfigHelper.BuildConfigurationFromJson(AppContext.BaseDirectory, "appSettings.json");
-            FhirStarterConfig.SetupFhir(services, appSettings, CompatibilityVersion.Latest);
-
-        }
-
-        // Copy this method
-        private void FhirSetup(IServiceCollection services)
+        // copy this method to your Startup
+        public void FhirDotnet3Setup(IServiceCollection services)
         {
             var appSettings =
                 StartupConfigHelper.BuildConfigurationFromJson(AppContext.BaseDirectory, "appsettings.json");
@@ -55,25 +46,20 @@ namespace FhirStarter.R4.Twisted.Core
             var instigator = FhirStarterConfig.GetInstigatorAssembly();
 
             services.Configure<FhirStarterSettings>(appSettings.GetSection(nameof(FhirStarterSettings)));
-            services.AddMvc(options =>
-            {
-                options.OutputFormatters.Clear();
-                options.RespectBrowserAcceptHeader = true;
-                options.OutputFormatters.Add(new XmlFhirSerializerOutputFormatter());
-                options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
-                options.OutputFormatters.Add(new JsonFhirFormatter());
-                options.EnableEndpointRouting = false;
-            })
-                .AddNewtonsoftJson(options =>
+            services.AddRouting();
+            services.AddControllers(controller =>
                 {
-                    options.SerializerSettings.Formatting = Formatting.Indented;
+                    controller.OutputFormatters.Clear();
+                    controller.RespectBrowserAcceptHeader = true;
+                    controller.OutputFormatters.Add(new JsonFhirFormatterDotNetCore3());
+                    controller.OutputFormatters.Add(new XmlFhirSerializerOutputFormatterDotNetCore3());
+                    controller.OutputFormatters.Add(new XmlFhirSerializerOutputFormatterDotNetCore3());
+                    controller.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
                 })
                 .AddApplicationPart(instigator).AddApplicationPart(detonator).AddControllersAsServices()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-
             services.AddHttpContextAccessor();
         }
-
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<IFhirService> logger)
@@ -93,13 +79,15 @@ namespace FhirStarter.R4.Twisted.Core
                     var operationOutcome = ErrorHandlingMiddleware.GetOperationOutCome(exception, true);
                     var fhirJsonConverter = new FhirJsonSerializer();
                     var result = fhirJsonConverter.SerializeToString(operationOutcome);
-                    context.Response.ContentType = "application/json";
+                    context.Response.ContentType = "application/json+fhir";
                     await context.Response.WriteAsync(result);
                 }
             }));
 
             app.ConfigureExceptionHandler(logger);
-            app.UseMvc();
+            app.UseRouting();
+            app.UseCors();
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyName>FhirStarter.R4.Twisted.Core</AssemblyName>
+    <RootNamespace>FhirStarter.R4.Twisted.Core</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,8 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FhirStarter.R4.Detonator.Core\FhirStarter.R4.Detonator.Core.csproj" />
-    <ProjectReference Include="..\FhirStarter.R4.Instigator.Core\FhirStarter.R4.Instigator.Core.csproj" />
+    <ProjectReference Include="..\FhirStarter.R4.Detonator.Core3\FhirStarter.R4.Detonator.Core3.csproj" />
+    <ProjectReference Include="..\FhirStarter.R4.Instigator.Core3\FhirStarter.R4.Instigator.Core3.csproj" />
   </ItemGroup>
 
   <ItemGroup>
